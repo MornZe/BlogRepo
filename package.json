@@ -1,15 +1,16 @@
 {
-  "devDependencies": {
-    "vite-plugin-restart": "^2.0.0",
-    "vitepress": "2.0.0-alpha.16",
-    "vitepress-sidebar": "^1.33.1"
-  },
-  "scripts": {
-    "dev": "vitepress dev blog",
-    "build": "vitepress build blog",
-    "preview": "vitepress preview blog"
-  },
-  "dependencies": {
-    "@theojs/lumen": "^6.4.5"
-  }
+    "devDependencies": {
+        "vite-plugin-restart": "^2.0.0",
+        "vitepress": "2.0.0-alpha.16",
+        "vitepress-sidebar": "^1.33.1"
+    },
+    "scripts": {
+        "dev": "node scripts/generate-posts.js && vitepress dev blog",
+        "build": "node scripts/generate-posts.js && vitepress build blog",
+        "preview": "vitepress preview blog",
+        "generate-posts": "node scripts/generate-posts.js"
+    },
+    "dependencies": {
+        "@theojs/lumen": "^6.4.5"
+    }
 }
