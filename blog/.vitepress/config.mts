@@ -29,7 +29,7 @@ const repoOwner = process.env.VERCEL_GIT_REPO_OWNER || 'MornZe'
 const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || 'BlogRepo'
 const commitUrl = `https://github.com/${repoOwner}/${repoSlug}/commit/${commitId}`
 
-const commitIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:2px"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>`
+const gitIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:3px;display:inline-block"><path d="M23.546 10.93L13.817.301c-.695-.698-1.824-.698-2.52 0l-2.218 2.218 2.808 2.81c.744-.33 1.622-.184 2.225.42.603.603.749 1.48.42 2.225l2.703 2.705c.744-.33 1.622-.185 2.225.42.603.603.749 1.48.42 2.225l2.81 2.81c.698-.695.698-1.825 0-2.52zm-12.162 9.088c-.33.744-.185 1.622.42 2.225.603.603 1.48.749 2.225.42l7.362-7.362-2.645-2.645-7.362 7.362zm2.97-6.582l-2.808-2.808c-.33-.745-.185-1.622.42-2.225.603-.603 1.48-.749 2.225-.42l2.808 2.808c.33.745.185 1.622-.42 2.225-.603.603-1.48.749-2.225.42zm-3.603-3.604l-2.81-2.81c-.33-.745-.184-1.622.42-2.225.603-.603 1.48-.749 2.225-.42l2.81 2.81c.33.745.184 1.622-.42 2.225-.603.603-1.48.749-2.225.42z"/></svg>`
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -93,7 +93,7 @@ export default defineConfig({
 
     footer: {
       message: '代码基于 MIT、文章基于 CC BY-NC-SA 4.0 许可发布',
-      copyright: `Copyright © 2026 MornZe · <a href="${commitUrl}" target="_blank" rel="noopener" style="color:var(--vp-c-text-2);text-decoration:none">${commitIcon}${commitId}@${branch}</a>`
+      copyright: `Copyright © 2026 MornZe · <a href="${commitUrl}" target="_blank" rel="noopener" style="color:var(--vp-c-text-2);text-decoration:none;white-space:nowrap">${gitIcon}${commitId}@${branch}</a>`
     },
     lastUpdated: {
       text: '最后更新于',
