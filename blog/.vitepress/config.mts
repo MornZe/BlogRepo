@@ -29,7 +29,10 @@ const repoOwner = process.env.VERCEL_GIT_REPO_OWNER || 'MornZe'
 const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || 'BlogRepo'
 const commitUrl = `https://github.com/${repoOwner}/${repoSlug}/commit/${commitId}`
 
-const gitIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:3px;display:inline-block"><path d="M23.546 10.93L13.817.301c-.695-.698-1.824-.698-2.52 0l-2.218 2.218 2.808 2.81c.744-.33 1.622-.184 2.225.42.603.603.749 1.48.42 2.225l2.703 2.705c.744-.33 1.622-.185 2.225.42.603.603.749 1.48.42 2.225l2.81 2.81c.698-.695.698-1.825 0-2.52zm-12.162 9.088c-.33.744-.185 1.622.42 2.225.603.603 1.48.749 2.225.42l7.362-7.362-2.645-2.645-7.362 7.362zm2.97-6.582l-2.808-2.808c-.33-.745-.185-1.622.42-2.225.603-.603 1.48-.749 2.225-.42l2.808 2.808c.33.745.185 1.622-.42 2.225-.603.603-1.48.749-2.225.42zm-3.603-3.604l-2.81-2.81c-.33-.745-.184-1.622.42-2.225.603-.603 1.48-.749 2.225-.42l2.81 2.81c.33.745.184 1.622-.42 2.225-.603.603-1.48.749-2.225.42z"/></svg>`
+const gitIcon = `<svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="vertical-align:-2px;margin-right:4px;display:inline-block">
+  <path d="M5 2a2 2 0 100 4 2 2 0 000-4zM5 10a2 2 0 100 4 2 2 0 000-4zM11 2a2 2 0 100 4 2 2 0 000-4z"/>
+  <path d="M5 6v4a2 2 0 002 2h2"/>
+</svg>`
 
 export default defineConfig({
   lang: 'zh-CN',
