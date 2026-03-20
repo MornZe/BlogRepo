@@ -1,16 +1,9 @@
-# .cnb.yml
 main:
   push:
-    - name: sync-to-github
+    - imports: https://cnb.build/MornZe/secrets/-/blob/main/github.yml
       docker:
         image: alpine/git
-      env:
-        GITHUB_USER: your-github-username
-        GITHUB_TOKEN: $GITHUB_TOKEN  # 从 imports 或 CNB Secrets 获取
-        GITHUB_REPO: github.com/your-username/your-repo.git
       stages:
-        - name: push to github
-          script: |
+        - script: |
             git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@${GITHUB_REPO}
-            git push github HEAD:${CNB_REF_NAME} --force
-            git push github --tags
+            git push github HEAD:${CNB_BRANCH} --force
