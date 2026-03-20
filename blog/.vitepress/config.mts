@@ -111,8 +111,8 @@ export default defineConfig({
 Copyright © 2026 MornZe 
 · <a href="${commitUrl}" target="_blank" rel="noopener" style="color:var(--vp-c-text-2);text-decoration:none;white-space:nowrap">
 ${gitIcon}${branch} · ${commitId}
-</a>
-· 本站由 ${vercelIcon} Vercel 强力赞助驱动 用❤️创造
+</a><br/>
+__本站由 ${vercelIcon}Vercel 强力赞助驱动 · 用<span style="color:#e25555;font-size:1.2em;vertical-align:-1px;display:inline-block;">❤️</span>创造__
 `
     },
 
