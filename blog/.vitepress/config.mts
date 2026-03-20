@@ -29,7 +29,14 @@ const repoOwner = process.env.VERCEL_GIT_REPO_OWNER || 'MornZe'
 const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || 'BlogRepo'
 const commitUrl = `https://github.com/${repoOwner}/${repoSlug}/commit/${commitId}`
 
-const gitIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-git-branch"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M7 8l0 8" /><path d="M9 18h6a2 2 0 0 0 2 -2v-5" /><path d="M14 14l3 -3l3 3" /></svg>`
+const gitIcon = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;display:inline-block">
+  <path d="M5 18a2 2 0 1 0 4 0" />
+  <path d="M5 6a2 2 0 1 0 4 0" />
+  <path d="M15 6a2 2 0 1 0 4 0" />
+  <path d="M7 8v8" />
+  <path d="M9 18h6a2 2 0 0 0 2-2v-5" />
+  <path d="M14 14l3-3l3 3" />
+</svg>`
 
 export default defineConfig({
   lang: 'zh-CN',
