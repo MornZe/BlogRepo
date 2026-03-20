@@ -47,10 +47,6 @@ export default defineConfig({
   description: "MornZe's VitePress Blog",
   lastUpdated: true,
 
-  markdown: {
-    theme: 'github-dark'
-  },
-
   vite: {
     plugins: [
       ViteRestart({
