@@ -1,6 +1,6 @@
 main:
   push:
-    - imports: https://cnb.build/MornZe/secrets/-/blob/main/github.yml
+    - imports: https://cnb.cool/MornZe-Dev/secrets/-/blob/main/github.yml
       docker:
         image: alpine/git
       stages:
