@@ -26,9 +26,9 @@
 ### McLogs-Next
 Minecraft 服务器日志分析工具，基于原生 PHP + FPM 开发，依赖 Aternos 服务链。代码写得颇为狼狈，但至今仍在勉强运行，支撑每日数千条日志解析请求。说它"勉强"，是因为现阶段的性能瓶颈主要在于 Aternos 的响应速度，而非我的代码——虽然我的代码，也确实没有什么优化余地。
 
-- **McLogs-Next-API** — Headless API 核心服务。[https://github.com/NingZeStudio/McLogs-Next-API](https://github.com/NingZeStudio/McLogs-Next-API)
+- **LogShare-v1** — Headless API 核心服务。[https://cnb.cool/MornZe-Dev/LogShare-v1](https://cnb.cool/MornZe-Dev/LogShare-v1)
 
-- **McLogs-Next-UI** — 官方 Web 界面，Vue 3 + Vite 构建，设计上追求简洁，实际使用中发现简洁的代价是功能藏得太深，用户时常找不到上传按钮在哪里。这大约是"极简"的另一种诠释。[https://github.com/NingZeStudio/McLogs-Next-UI](https://github.com/NingZeStudio/McLogs-Next-UI)
+- **LogShareUI-v1** — 官方 Web 界面，Vue 3 + Vite 构建，设计上追求简洁，实际使用中发现简洁的代价是功能藏得太深，用户时常找不到上传按钮在哪里。这大约是"极简"的另一种诠释。[https://cnb.cool/MornZe-Dev/LogShareUI-v1](https://cnb.cool/MornZe-Dev/LogShareUI-v1)
 
 ---
 
@@ -41,9 +41,9 @@ McLogs-Next 的重构版本，基于 Hyperf + Swoole 重写，目标彻底摆脱
 
 我开发了两个小项目，一个特点是优雅，另一个也是优雅。
 
-- **[https://github.com/MornZe/StartPage](https://github.com/MornZe/StartPage)** — 基于 Vite + Vue 3 + TypeScript 的浏览器起始页。功能极简：一个搜索框，一组可自定义的快捷链接，以及根据时间自动切换的深浅色主题。没有天气组件，没有待办清单，没有一言 API。我觉得那些东西会分散你打开浏览器时的注意力——虽然你打开浏览器，本来就是为了分散注意力。这大约是自欺欺人的一种。
+- **[https://cnb.cool/MornZe-Dev/StartPage](https://cnb.cool/MornZe-Dev/StartPage)** — 基于 Vite + Vue 3 + TypeScript 的浏览器起始页。功能极简：一个搜索框，一组可自定义的快捷链接，以及根据时间自动切换的深浅色主题。没有天气组件，没有待办清单，没有一言 API。我觉得那些东西会分散你打开浏览器时的注意力——虽然你打开浏览器，本来就是为了分散注意力。这大约是自欺欺人的一种。
 
-- **[https://github.com/MornZe/HomePage](https://github.com/MornZe/HomePage)** — 基于同样的技术栈，一个单屏滚动的个人主页。包含头像、简介、技能标签、项目列表和联系方式，所有信息都在首屏可见，无需滚动。我固执地认为，如果一个访客需要滚动才能了解你，那你可能写得太多，或者他没那么想了解你。这种固执，大约也是自我保护的一种。
+- **[https://cnb.cool/MornZe-Dev/HomePage](https://cnb.cool/MornZe-Dev/HomePage)** — 基于同样的技术栈，一个单屏滚动的个人主页。包含头像、简介、技能标签、项目列表和联系方式，所有信息都在首屏可见，无需滚动。我固执地认为，如果一个访客需要滚动才能了解你，那你可能写得太多，或者他没那么想了解你。这种固执，大约也是自我保护的一种。
 
 ## 现在在运营的网站
 
@@ -58,4 +58,4 @@ McLogs-Next 的重构版本，基于 Hyperf + Swoole 重写，目标彻底摆脱
 
 ---
 
-本站源码托管于 [GitHub](https://github.com/MornZe/NlogRepo)，文章采用 CC BY-NC-SA 4.0 协议授权。如有问题，欢迎通过邮件或 GitHub Issue 联系。虽然我不一定及时回复，但看到消息时，大约是会高兴的。
+本站源码托管于 [CNB.Cool](https://cnb.cool/MornZe-Dev/VitePress-Blog)，文章采用 CC BY-NC-SA 4.0 协议授权。如有问题，欢迎通过邮件或 GitHub Issue 联系。虽然我不一定及时回复，但看到消息时，大约是会高兴的。

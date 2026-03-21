@@ -24,9 +24,9 @@ const archiveItems = addPrefix(Array.isArray(archiveRaw) ? archiveRaw : [], '/ar
 
 const commitId = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || 'dev'
 const branch = process.env.VERCEL_GIT_COMMIT_REF || 'main'
-const repoOwner = process.env.VERCEL_GIT_REPO_OWNER || 'MornZe'
-const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || 'BlogRepo'
-const commitUrl = `https://github.com/${repoOwner}/${repoSlug}/commit/${commitId}`
+const repoOwner = process.env.VERCEL_GIT_REPO_OWNER || 'MornZe-Dev'
+const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || 'VitePress-Blog'
+const commitUrl = `https://cnb.cool/${repoOwner}/${repoSlug}/commit/${commitId}`
 
 const gitIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:3px;display:inline-block">
   <circle cx="7" cy="6" r="1.8" />
@@ -166,8 +166,8 @@ ${gitIcon}${commitId}@${branch}
     },
 
     editLink: {
-      pattern: 'https://github.com/MornZe/BlogRepo/edit/main/blog/:path',
-      text: '在 GitHub 上编辑此页'
+      pattern: 'https://cnb.cool/MornZe-Dev/VitePress-Blog/-/edit/main/blog/:path',
+      text: '在 CNB.Cool 上编辑此页'
     },
 
     darkModeSwitchLabel: '切换主题',
