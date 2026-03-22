@@ -1,43 +1,43 @@
 {
-  "hash": "f5e0f671",
-  "configHash": "8668d46a",
+  "hash": "1d8edb56",
+  "configHash": "3f385952",
   "lockfileHash": "9e3ea0aa",
-  "browserHash": "f83a13e7",
+  "browserHash": "9753bee0",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/.pnpm/vue@3.5.30_typescript@5.9.3/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "d8d94327",
+      "fileHash": "2df8044b",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/.pnpm/@vue+devtools-api@8.1.0/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "449e431d",
+      "fileHash": "c1bcd4bf",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/.pnpm/@vueuse+core@14.2.1_vue@3.5.30_typescript@5.9.3_/node_modules/@vueuse/core/dist/index.js",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "086f07c2",
+      "fileHash": "def0a107",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/.pnpm/@vueuse+integrations@14.2.1_focus-trap@7.8.0_vue@3.5.30_typescript@5.9.3_/node_modules/@vueuse/integrations/dist/useFocusTrap.js",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "2a4b34a1",
+      "fileHash": "61d09bce",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/.pnpm/mark.js@8.11.1/node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "8f64e35a",
+      "fileHash": "48a3b123",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/.pnpm/minisearch@7.2.0/node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "954f031d",
+      "fileHash": "09881308",
       "needsInterop": false
     }
   },
