@@ -43,8 +43,8 @@ const vercelIcon = `<svg viewBox="0 0 24 24" width="14" height="14" fill="curren
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: "MornZeBlog",
-  description: "MornZe's VitePress Blog",
+  title: "QiTryBlog",
+  description: "QiTry's VitePress Blog",
   lastUpdated: true,
 
   vite: {
@@ -104,7 +104,7 @@ export default defineConfig({
     footer: {
       message: '代码基于 MIT、文章基于 CC BY-NC-SA 4.0 许可发布',
       copyright: `
-Copyright © 2026 MornZe 
+Copyright © 2026 QiTry 
 · <a href="${commitUrl}" target="_blank" rel="noopener" style="color:var(--vp-c-text-2);text-decoration:none;white-space:nowrap">
 ${gitIcon}${commitId}@${branch}
 </a><br/>
