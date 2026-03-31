@@ -3,6 +3,9 @@
 layout: home
 
 hero:
+ image: 
+   src: https://fastly.jsdelivr.net/gh/MornZe/Blog-Static-Resource@main/new_image/new_image/IMG_20260331_110648.jpg
+   alt: Avatar
  name: QiTry's WebSite
  text:  A Profile Based on VitePress, deployed on Vercel via GitHub
 
