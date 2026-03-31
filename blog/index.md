@@ -3,12 +3,8 @@
 layout: home
 
 hero:
- image: 
-   src: https://fastly.jsdelivr.net/gh/MornZe/Blog-Static-Resource@main/images/353fa653cdde9ba2.png
-   alt: Avatar
- name: 琪初随笔纪事簿
- text: QiTry's VitePress WebSite
- tagline: 记录日常随笔，偶尔无病呻吟。
+ name: QiTry's WebSite
+ text:  A Profile Based on VitePress, deployed on Vercel via GitHub
 
 features:
  - title: 前往文章索引

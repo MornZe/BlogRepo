@@ -166,7 +166,7 @@ ${gitIcon}${commitId}@${branch}
     },
 
     editLink: {
-      pattern: 'https://github/MornZe/BlogRepo/edit/main/blog/:path',
+      pattern: 'https://github.com/MornZe/BlogRepo/edit/main/blog/:path',
       text: '在 Github 上编辑此页'
     },
 
