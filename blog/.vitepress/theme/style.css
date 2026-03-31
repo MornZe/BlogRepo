@@ -141,3 +141,8 @@
   margin-right: 5px !important;
   max-width: 100% !important;
 }
+
+/* 给 hero 图片加圆角 */
+.VPHero .VPImage {
+  border-radius: 16px;  /* 圆角大小，50% 是圆形 */
+}
