@@ -56,7 +56,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: 'https://fastly.jsdelivr.net/gh/MornZe/Blog-Static-Resource@main/images/353fa653cdde9ba2.png',
+    logo: 'https://fastly.jsdelivr.net/gh/MornZe/Blog-Static-Resource@main/new_image/IMG_20260331_110648.jpg',
 
     nav: [
       { text: '网站首页', link: '/' },
