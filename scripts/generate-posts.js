@@ -47,7 +47,7 @@ const now = new Date().toLocaleString('zh-CN', {
 
 const content = `# 文章列表
 
-这里是我写过的、目前已经上传到博客的所有文章列表，更多可以看 关于我：[https://blog.zeink.cc/about.html](https://blog.zeink.cc/about.html)  
+这里是我写过的、目前已经上传到博客的所有文章列表，更多可以看 关于我：[https://qitry.vip/about.html](https://qitry.vip/about.html)  
 最后更新于 ${now}
 
 ## 技术随笔（${techPosts.length}篇）

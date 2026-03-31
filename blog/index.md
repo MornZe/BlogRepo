@@ -7,7 +7,7 @@ hero:
    src: https://fastly.jsdelivr.net/gh/MornZe/Blog-Static-Resource@main/images/353fa653cdde9ba2.png
    alt: Avatar
  name: 琪初随笔纪事簿
- text: QiTry's VitePress Blog
+ text: QiTry's VitePress WebSite
  tagline: 记录日常随笔，偶尔无病呻吟。
 
 features:

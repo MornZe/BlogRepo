@@ -22,43 +22,4 @@
 现在改用 VitePress 配合 Vercel，至少不用担心服务器跑路。写作风格比较随意，通常没有完整大纲，想到哪写到哪，偶尔技术，偶尔生活，偶尔纯粹的无病呻吟。如果你发现某篇文章前后矛盾，那很正常——人的想法本来就是流动的，正如我此刻写下的这段话，落笔前并无完整构思，写到哪算哪。
 
 具体的，可以阅读这篇文章：
-[为什么我又双叒叕重建了博客?](https://blog.zeink.cc/archive/02.html)
-
-## 维护中的项目
-
-### McLogs-Next
-Minecraft 服务器日志分析工具，基于原生 PHP + FPM 开发，依赖 Aternos 服务链。代码写得颇为狼狈，但至今仍在勉强运行，支撑每日数千条日志解析请求。说它"勉强"，是因为现阶段的性能瓶颈主要在于 Aternos 的响应速度，而非我的代码——虽然我的代码，也确实没有什么优化余地。
-
-- **LogShare-v1** — Headless API 核心服务。[https://cnb.cool/MornZe-Dev/LogShare-v1](https://cnb.cool/MornZe-Dev/LogShare-v1)
-
-- **LogShareUI-v1** — 官方 Web 界面，Vue 3 + Vite 构建，设计上追求简洁，实际使用中发现简洁的代价是功能藏得太深，用户时常找不到上传按钮在哪里。这大约是"极简"的另一种诠释。[https://cnb.cool/MornZe-Dev/LogShareUI-v1](https://cnb.cool/MornZe-Dev/LogShareUI-v1)
-
----
-
-### LogShare2（预告）
-McLogs-Next 的重构版本，基于 Hyperf + Swoole 重写，目标彻底摆脱 Aternos 依赖。目前处于开发阶段，API 骨架已搭好，核心解析逻辑还在和正则表达式搏斗。预计发布日期：待定。所谓"待定"，意思是取决于我什么时候能不拖延，而拖延这件事，我向来是擅长的。
-
----
-
-### 其他项目
-
-我开发了两个小项目，一个特点是优雅，另一个也是优雅。
-
-- **[https://cnb.cool/MornZe-Dev/StartPage](https://cnb.cool/MornZe-Dev/StartPage)** — 基于 Vite + Vue 3 + TypeScript 的浏览器起始页。功能极简：一个搜索框，一组可自定义的快捷链接，以及根据时间自动切换的深浅色主题。没有天气组件，没有待办清单，没有一言 API。我觉得那些东西会分散你打开浏览器时的注意力——虽然你打开浏览器，本来就是为了分散注意力。这大约是自欺欺人的一种。
-
-- **[https://cnb.cool/MornZe-Dev/HomePage](https://cnb.cool/MornZe-Dev/HomePage)** — 基于同样的技术栈，一个单屏滚动的个人主页。包含头像、简介、技能标签、项目列表和联系方式，所有信息都在首屏可见，无需滚动。我固执地认为，如果一个访客需要滚动才能了解你，那你可能写得太多，或者他没那么想了解你。这种固执，大约也是自我保护的一种。
-
-## 现在在运营的网站
-
-- **LogShare** — https://logshare.cn/  
-  初代 Minecraft 日志分享平台，目前仍在线上运行。LogShare2 开发中，虽然"开发中"这三个字，我已经说了很久。
-
-- **个人主页** — https://zeink.cc/  
-  极致优雅极简风格的个人名片页，主要用来展示联系方式和项目导航。访客不多，但我仍每日查看访问统计，这大约是虚荣心在作祟。
-
-- **起始页** — https://start.zeink.cc/  
-  自用的浏览器起始页，极简到只有搜索框和时间显示。有时我会盯着它发呆，想不起自己要搜索什么，这大约是现代人的通病。
-
----
-
-本站源码托管于 [CNB.Cool](https://cnb.cool/MornZe-Dev/VitePress-Blog)，文章采用 CC BY-NC-SA 4.0 协议授权。如有问题，欢迎通过邮件或 GitHub Issue 联系。虽然我不一定及时回复，但看到消息时，大约是会高兴的。
+[为什么我又双叒叕重建了博客?](https://qitry.vip/archive/02.html)
