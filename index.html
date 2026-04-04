@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>QiTry 琪初</title>
+    <title>QiTry 琪初 · 全栈开发者</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
@@ -19,19 +20,16 @@
             padding: 2rem 1.5rem;
         }
 
-        /* 容器水平居中，内部内容全部左对齐 */
         .container {
             max-width: 680px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* 所有内容强制左对齐 */
         .profile {
             text-align: left;
         }
 
-        /* 头像：圆形、无装饰、左对齐 */
         .avatar {
             width: 110px;
             height: 110px;
@@ -42,7 +40,6 @@
             border: 0.5px solid rgba(0, 0, 0, 0.08);
         }
 
-        /* 姓名 */
         .name {
             font-size: 2.2rem;
             font-weight: 600;
@@ -51,7 +48,6 @@
             color: #111;
         }
 
-        /* 头衔 / 简短描述 */
         .title {
             font-size: 1rem;
             font-weight: 450;
@@ -59,7 +55,6 @@
             margin-bottom: 1.6rem;
         }
 
-        /* 简介段落 — 保持极简阅读流 */
         .bio {
             font-size: 1rem;
             color: #2c2c2c;
@@ -71,7 +66,6 @@
             margin-bottom: 0.85rem;
         }
 
-        /* 链接区：左对齐排列 */
         .links {
             display: flex;
             flex-wrap: wrap;
@@ -81,11 +75,14 @@
         }
 
         .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 470;
             color: #4a4a4a;
-            transition: color 0.2s ease;
+            transition: color 0.2s ease, border-color 0.2s;
             letter-spacing: -0.01em;
             border-bottom: 1px dotted transparent;
         }
@@ -95,27 +92,54 @@
             border-bottom-color: #aaa;
         }
 
-        /* 联系方式单独一行，纯文本，保持风格统一 */
+        .links a svg,
+        .contact-item svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            stroke-width: 1.8;
+            transition: stroke 0.2s;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
         .contact {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.2rem;
+            margin-top: 0.25rem;
             font-size: 0.95rem;
             color: #4a4a4a;
-            margin-top: 0.25rem;
-            padding-top: 0.25rem;
-            border-top: none;
         }
 
-        .contact span {
-            color: #6b6b6b;
+        .contact-label {
             font-weight: 450;
-        }
-
-        .contact .wechat-id {
-            color: #1a1a1a;
-            font-weight: 470;
+            color: #6b6b6b;
             letter-spacing: -0.01em;
         }
 
-        /* 响应式 */
+        .contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: transparent;
+        }
+
+        .contact-item span:not(.lucide) {
+            font-weight: 470;
+            color: #1a1a1a;
+            letter-spacing: -0.01em;
+        }
+
+        .contact-item span {
+            font-weight: 470;
+        }
+
+        .contact-item svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 1.5rem;
@@ -130,6 +154,9 @@
             .links {
                 gap: 1.2rem;
             }
+            .contact {
+                gap: 0.8rem;
+            }
         }
 
         html {
@@ -143,25 +170,44 @@
     <div class="profile">
         <img class="avatar" src="https://github.com/qitry.png" alt="QiTry 琪初的头像">
         
-        <div class="name">QiTry/琪初</div>
+        <div class="name">QiTry / 琪初</div>
         
         <div class="title">全栈开发者 · 产品设计师 · LogShare 开发者</div>
         
         <div class="bio">
-            <p>你好，我是琪初(QiTry)。我是一名来着中国湖南的PHP全栈程序员、主要技术栈是PHP8和Vue.js以及TypeScript，在2023年到2025年这期间痴迷于网站搭建/开发和维护，但真正做下来的...一个都没有，目前除了“LogShare”也没什么项目。我的上一个网名叫“梦泽(MengZe/MengZe2)”，这个网名我用了很多年，直到我狠心退出原本的圈子，才想改名QiTry，为什么中文叫“琪初”呢？具体是因为我的初恋名字中含一个“琪”字。</p>
+            <p>你好，我是琪初(QiTry)。我是一名来自中国湖南的PHP全栈程序员，主要技术栈是PHP8和Vue.js以及TypeScript，在2023年到2025年这期间痴迷于网站搭建/开发和维护，但真正做下来的...一个都没有，目前除了“LogShare”也没什么项目。我的上一个网名叫“梦泽(MengZe/MengZe2)”，这个网名我用了很多年，直到我狠心退出原本的圈子，才想改名QiTry，为什么中文叫“琪初”呢？具体是因为我的初恋名字中含一个“琪”字。</p>
             <p>讲个笑话，我目前是没有QQ的，常年和QQ斗智斗勇，它封禁了我9个QQ账号，于是我趁着2026年初的换圈子干脆直接抛弃了它——不再使用QQ做为社交软件，转而投向微信这款更好用，也更普遍的软件。</p>
             <p>我个人呢也是习惯写作的，此前搭建过四个博客网站——并非一次性搭建四个，而是一次次迁移。再加上我是个不备份主义者，这导致我在使用的服务商跑路之后几乎没有留下任何文章数据，之前觉得挺可惜的，现在想来也算是放下一个大压力了。我长期使用Github开源的Kori做为写作软件，PC端则是使用Typora(我所使用的操作系统是Debian13)。</p>
         </div>
-        
         <div class="links">
-            <a href="https://github.com/qitry" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://logshare.cn" target="_blank" rel="noopener noreferrer">LogShare</a>
+            <a href="https://github.com/qitry" target="_blank" rel="noopener noreferrer">
+                GitHub
+            </a>
+            <a href="https://logshare.cn" target="_blank" rel="noopener noreferrer">
+                LogShare
+            </a>
         </div>
         
         <div class="contact">
-            <span>联系方式</span> <span class="wechat-id">微信 qitry_sama</span>
+            <span class="contact-label">联系方式</span>
+            <span class="contact-item">
+                <span>微信：qitry_sama</span>
+            </span>
+            <span class="contact-item">
+                <span data-lucide="mail"></span>
+                <span>邮箱：qitryt@sina.cn</span>
+            </span>
         </div>
     </div>
 </div>
+
+<script>
+    // 确保 DOM 完全加载后初始化 Lucide 图标
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+    });
+</script>
 </body>
 </html>
