@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>QiTry 琪初 · 半路出家的开发者</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fafaf9;
+            font-family: -apple-system, 'Inter', 'SF Pro Text', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 容器水平居中，内部内容全部左对齐 */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 所有内容强制左对齐 */
+        .profile {
+            text-align: left;
+        }
+
+        /* 头像：圆形、无装饰、左对齐 */
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 1.6rem;
+            border: 0.5px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* 姓名 */
+        .name {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+            color: #111;
+        }
+
+        /* 头衔 / 简短描述 */
+        .title {
+            font-size: 1rem;
+            font-weight: 450;
+            color: #6b6b6b;
+            margin-bottom: 1.6rem;
+        }
+
+        /* 简介段落 — 保持极简阅读流 */
+        .bio {
+            font-size: 1rem;
+            color: #2c2c2c;
+            margin-bottom: 2rem;
+            max-width: 100%;
+        }
+
+        .bio p {
+            margin-bottom: 0.85rem;
+        }
+
+        /* 链接区：左对齐排列 */
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .links a {
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 470;
+            color: #4a4a4a;
+            transition: color 0.2s ease;
+            letter-spacing: -0.01em;
+            border-bottom: 1px dotted transparent;
+        }
+
+        .links a:hover {
+            color: #000;
+            border-bottom-color: #aaa;
+        }
+
+        /* 联系方式单独一行，纯文本，保持风格统一 */
+        .contact {
+            font-size: 0.95rem;
+            color: #4a4a4a;
+            margin-top: 0.25rem;
+            padding-top: 0.25rem;
+            border-top: none;
+        }
+
+        .contact span {
+            color: #6b6b6b;
+            font-weight: 450;
+        }
+
+        .contact .wechat-id {
+            color: #1a1a1a;
+            font-weight: 470;
+            letter-spacing: -0.01em;
+        }
+
+        /* 响应式 */
+        @media (max-width: 560px) {
+            body {
+                padding: 1.5rem;
+            }
+            .name {
+                font-size: 1.85rem;
+            }
+            .avatar {
+                width: 90px;
+                height: 90px;
+            }
+            .links {
+                gap: 1.2rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="profile">
+        <!-- 头像：GitHub 头像地址 -->
+        <img class="avatar" src="https://github.com/qitry.png" alt="QiTry 琪初的头像">
+        
+        <!-- 姓名：英文名 + 中文名 -->
+        <div class="name">QiTry/琪初</div>
+        
+        <!-- 头衔：全栈 / 产品设计 / LogShare 开发者 -->
+        <div class="title">全栈开发者 · 产品设计师 · LogShare 开发者</div>
+        
+        <!-- 自嘲式介绍，保留原文所有细节，拆分为短段落增加呼吸感 -->
+        <div class="bio">
+            <p>你好，我是琪初——按某些技术论坛标准算 PHP 全栈，按自己标准只是个学历不高、半路出家、靠搜索框续命的人。技术栈上精通 PHP(确信) 和“熟练” Vue，实则遇坑先重启再 Google；也“浅尝”过 Docker、小程序等，其实是文档看一半就敢说会了。设计上能在 Figma 里做出完美 Demo，一进开发就崩成内联样式堆叠。</p>
+            <p>有写作攒过三百多篇文章，然后因为服务器运营商跑路，没备份现在只剩 20 来篇，而且至今仍没学会备份。</p>
+        </div>
+        
+        <!-- 极简链接区：GitHub 与 LogShare -->
+        <div class="links">
+            <a href="https://github.com/qitry" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://logshare.cn" target="_blank" rel="noopener noreferrer">LogShare</a>
+        </div>
+        
+        <!-- 联系方式纯文本，保持干净左对齐 -->
+        <div class="contact">
+            <span>联系方式</span> <span class="wechat-id">微信 qitry_sama</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
