@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>QiTry 琪初 · 全栈开发者</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fafaf9;
+            font-family: -apple-system, 'Inter', 'SF Pro Text', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .profile {
+            text-align: left;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 1.6rem;
+            border: 0.5px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .name {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+            color: #111;
+        }
+
+        .title {
+            font-size: 1rem;
+            font-weight: 450;
+            color: #6b6b6b;
+            margin-bottom: 1.6rem;
+        }
+
+        .posts {
+            font-size: 1rem;
+            color: #2c2c2c;
+            margin-bottom: 2rem;
+            max-width: 100%;
+        }
+
+        .posts p {
+            margin-bottom: 0.85rem;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 470;
+            color: #4a4a4a;
+            transition: color 0.2s ease, border-color 0.2s;
+            letter-spacing: -0.01em;
+            border-bottom: 1px dotted transparent;
+        }
+
+        .links a:hover {
+            color: #000;
+            border-bottom-color: #aaa;
+        }
+
+        .links a svg,
+        .contact-item svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            stroke-width: 1.8;
+            transition: stroke 0.2s;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .contact {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.2rem;
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+            color: #4a4a4a;
+        }
+
+        .contact-label {
+            font-weight: 450;
+            color: #6b6b6b;
+            letter-spacing: -0.01em;
+        }
+
+        .contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: transparent;
+        }
+
+        .contact-item span:not(.lucide) {
+            font-weight: 470;
+            color: #1a1a1a;
+            letter-spacing: -0.01em;
+        }
+
+        .contact-item span {
+            font-weight: 470;
+        }
+
+        .contact-item svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 1.5rem;
+            }
+            .name {
+                font-size: 1.85rem;
+            }
+            .avatar {
+                width: 90px;
+                height: 90px;
+            }
+            .links {
+                gap: 1.2rem;
+            }
+            .contact {
+                gap: 0.8rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="profile">
+        <img class="avatar" src="https://fastly.jsdelivr.net/gh/qitry/Blog-Static-Resource@main/new_image/IMG_20260331_110648.webp" alt="QiTry 琪初的头像">
+
+        <div class="name">QiTry / 琪初</div>
+
+        <div class="title">全栈开发者 · 产品设计师 · LogShare 开发者</div>
+
+        <div class="posts">
+        <a href="https://zhuanlan.zhihu.com/p/2024180282903864235" target="_blank" rel="noopener noreferrer">
+                《2026年的今天，搭建一个个人博客还值得吗？》
+            </a>
+        </div>
+        <div class="links">
+            <a href="https://github.com/qitry" target="_blank" rel="noopener noreferrer">
+                GitHub
+            </a>
+            <a href="https://logshare.cn" target="_blank" rel="noopener noreferrer">
+                LogShare
+            </a>
+        </div>
+
+        <div class="contact">
+            <span class="contact-label">联系方式</span>
+            <span class="contact-item">
+                <span data-lucide="mail"></span>
+                <span>邮箱：qitryt@sina.cn</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 确保 DOM 完全加载后初始化 Lucide 图标
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+    });
+</script>
+</body>
+</html>
