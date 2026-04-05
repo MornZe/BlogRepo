@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>QiTry 琪初 · 全栈开发者</title>
+    <title>QiTry 琪初 · 文章列表</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
@@ -55,15 +55,37 @@
             margin-bottom: 1.6rem;
         }
 
-        .posts {
-            font-size: 1rem;
-            color: #2c2c2c;
+        .articles-list {
             margin-bottom: 2rem;
-            max-width: 100%;
         }
 
-        .posts p {
-            margin-bottom: 0.85rem;
+        .article-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .article-title {
+            font-size: 1.05rem;
+            font-weight: 470;
+            color: #1a1a1a;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease;
+        }
+
+        .article-item a:hover .article-title {
+            color: #000;
+        }
+
+        .article-meta {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 450;
         }
 
         .links {
@@ -174,11 +196,15 @@
 
         <div class="title">全栈开发者 · 产品设计师 · LogShare 开发者</div>
 
-        <div class="posts">
-        <a href="https://zhuanlan.zhihu.com/p/2024180282903864235" target="_blank" rel="noopener noreferrer">
-                《2026年的今天，搭建一个个人博客还值得吗？》
-            </a>
+        <div class="articles-list">
+            <div class="article-item">
+                <a href="https://zhuanlan.zhihu.com/p/2024180282903864235" target="_blank" rel="noopener noreferrer">
+                    <div class="article-title">2026年的今天，搭建一个个人博客还值得吗？</div>
+                    <div class="article-meta">知乎专栏 · 2026-04-05</div>
+                </a>
+            </div>
         </div>
+
         <div class="links">
             <a href="https://github.com/qitry" target="_blank" rel="noopener noreferrer">
                 GitHub
@@ -199,7 +225,6 @@
 </div>
 
 <script>
-    // 确保 DOM 完全加载后初始化 Lucide 图标
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof lucide !== 'undefined' && lucide.createIcons) {
             lucide.createIcons();
