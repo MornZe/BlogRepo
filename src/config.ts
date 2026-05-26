@@ -29,7 +29,7 @@ const config: Config = {
     },
     site: {
         title: 'QiTry 琪初',
-        description: '分享技术随笔、精品文章与生活感悟。',
+        description: '分享精品文章与生活感悟。',
         baseUrl: '/'
     }
 };
