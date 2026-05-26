@@ -1,7 +1,8 @@
 <div class="n"><%= columnName %></div>
 <div class="t">专栏文章</div>
 <div class="l">
-    <% posts.forEach(post => { %>
+    <% var sorted = posts.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); }); %>
+    <% sorted.forEach(function(post) { %>
         <div class="i">
             <a href="/posts/<%= post.hash %>.html">
                 <div class="i-t"><%= post.title %></div>

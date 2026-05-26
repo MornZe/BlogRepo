@@ -1,6 +1,5 @@
 import fs from 'fs';
 import crypto from 'crypto';
-import path from 'path';
 
 /**
  * 生成 7 位 MD5 哈希

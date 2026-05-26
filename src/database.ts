@@ -18,7 +18,7 @@ class Database {
         if (fs.existsSync(this.path)) {
             try {
                 this.data = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
-            } catch (err) {
+            } catch (_err) {
                 console.warn('Database parse error, using empty one.');
             }
         }

@@ -52,5 +52,5 @@ export const processPosts = (postsDir: string, db: Database): PostData[] => {
         allPosts.push(postData);
     });
 
-    return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).reverse();
+    return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };

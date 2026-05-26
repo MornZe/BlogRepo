@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>从 Shadcn-Vue 迁移到 PrimeVue 4 不完全指南 - QiTry</title>
+    <meta name="description" content="QiTry 琪初的个人博客，分享技术随笔、精品文章与生活感悟。">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.2.5/index.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        *::selection{background:rgba(139,69,19,.15);color:var(--ink)}
+        :focus-visible{outline:2px solid var(--accent2);outline-offset:2px;border-radius:2px}
+        html{--paper:#f9f5ec;--ink:#2c2416;--ink2:#6b5e4a;--ink3:#9c8b70;--accent:#8b4513;--accent2:#cd853f;--line:#e0d5c1;--card:#fefcf7;--shadow:0 1px 3px rgba(44,36,22,.06),0 2px 8px rgba(44,36,22,.04);--shadow-lg:0 2px 6px rgba(44,36,22,.08),0 6px 20px rgba(44,36,22,.06);scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+        body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC','Source Han Serif SC','Songti SC',ui-serif,Georgia,serif;line-height:1.8;padding:2.5rem 1.5rem 2rem;position:relative}
+        body::before{content:'';position:fixed;inset:0;opacity:.025;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px;z-index:0}
+        body.not-home{padding-top:72px}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+        ::-webkit-scrollbar-thumb:hover{background:var(--ink3)}
+        .c{max-width:720px;margin:0 auto;opacity:1;transition:opacity .2s ease;position:relative;z-index:1}
+        .c.fade{opacity:0}
+        .c>.n,.c>.t,.c>.l,.c>.b,.c>.nav-columns,.c>.a-w{position:relative}
+        .c>.n,.c>.t,.c>.l,.c>.b,.c>.nav-columns,.c>.a-w{z-index:1}
+
+        .a-w{position:relative;display:inline-block;margin-bottom:1.6rem}
+        .a{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--card);box-shadow:var(--shadow);transition:transform .3s ease}
+        .a:hover{transform:scale(1.04)}
+        .a-d{position:absolute;bottom:4px;right:4px;width:20px;height:20px;background:#22c55e;border-radius:50%;border:2px solid var(--paper)}
+
+        .n{font-size:2.2rem;font-weight:700;letter-spacing:.02em;margin-bottom:.4rem;line-height:1.3;color:var(--ink)}
+        .t{color:var(--ink2);margin-bottom:1.6rem;font-size:.95rem;letter-spacing:.02em}
+        .b{margin-bottom:2rem}
+        .b p{margin-bottom:.9rem;text-indent:2em}
+        .b p:first-of-type{text-indent:0}
+        .h{background:rgba(139,69,19,.1);color:var(--accent);padding:.1rem .3rem;border-radius:3px}
+
+        .l{margin:1.5rem 0}
+        .l-t{font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;letter-spacing:.04em}
+        .l-t::before{content:'◆';color:var(--accent2);font-size:.5rem}
+        .l-t::after{content:'';flex:1;height:1px;background:var(--line)}
+
+        .i{margin-bottom:.6rem;padding:1rem 1.2rem;border-radius:4px;transition:all .25s cubic-bezier(.16,1,.3,1);border-bottom:1px dashed var(--line);position:relative}
+        .i:last-of-type{border-bottom:none}
+        .i:hover{background:var(--card);box-shadow:var(--shadow);border-bottom-color:transparent;border-radius:6px;transform:translateX(6px)}
+        .i a{text-decoration:none;color:inherit;display:block}
+        .i-t{font-size:1.05rem;font-weight:500;transition:color .2s;line-height:1.45;color:var(--ink)}
+        .i a:hover .i-t{color:var(--accent)}
+        .i-m{font-size:.82rem;color:var(--ink3);margin-top:.3rem;letter-spacing:.01em}
+
+        .nav-columns{display:flex;gap:1.6rem;margin-bottom:2rem;padding-bottom:.8rem;position:relative}
+        .nav-columns::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--line)}
+        .nav-columns a{text-decoration:none;color:var(--ink3);font-size:.92rem;transition:color .2s;position:relative;letter-spacing:.02em}
+        .nav-columns a:hover{color:var(--ink)}
+        .nav-columns a.active{color:var(--ink);font-weight:600}
+        .nav-columns a.active::after{content:'';position:absolute;bottom:-.8rem;left:0;width:100%;height:2px;background:var(--accent)}
+
+        .markdown-body{background-color:transparent!important;color:inherit!important;font-size:1.05rem!important;line-height:1.85!important;font-family:inherit!important}
+        .markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4{border:none!important;color:var(--ink)!important;font-family:'Noto Serif SC',ui-serif,Georgia,serif!important;font-weight:700!important;line-height:1.3!important}
+        .markdown-body h1{font-size:1.8rem!important;margin:2.8rem 0 1rem!important;padding-bottom:.6rem;border-bottom:2px solid var(--accent2)!important;letter-spacing:.03em}
+        .markdown-body h2{font-size:1.45rem!important;margin:2.4rem 0 .8rem!important;padding-bottom:.4rem;border-bottom:1px dashed var(--line)!important;letter-spacing:.02em}
+        .markdown-body h3{font-size:1.2rem!important;margin:1.8rem 0 .6rem!important;letter-spacing:.01em}
+        .markdown-body h4{font-size:1.05rem!important;margin:1.4rem 0 .5rem!important}
+        .markdown-body h1+p,.markdown-body h2+p,.markdown-body h3+p,.markdown-body h4+p{margin-top:.4rem!important}
+        .markdown-body p{margin-bottom:1rem;text-indent:2em}
+        .markdown-body p:first-of-type,.markdown-body h1+p,.markdown-body h2+p,.markdown-body h3+p,.markdown-body h4+p,.markdown-body blockquote p,.markdown-body li>p,.markdown-body ul+p,.markdown-body ol+p,.markdown-body pre+p{text-indent:0}
+        .markdown-body pre{background:#3a3226!important;border:none!important;padding:1.2em!important;border-radius:6px!important;overflow-x:auto;margin:1.2rem 0!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.2)}
+        .markdown-body code[class*="language-"]{font-size:.85rem!important}
+        .line-numbers .line-numbers-rows{border-right:1px solid rgba(140,128,98,.15)!important}
+        .line-numbers-rows>span:before{color:#8c8062!important}
+        .markdown-body code{font-family:'Fira Code','Roboto Mono',monospace!important;background:rgba(139,69,19,.06)!important;color:var(--accent)!important;padding:.15em .4em!important;border-radius:3px!important;font-size:.9em!important}
+        .markdown-body pre code{background:transparent!important;color:#e8dcc8!important;font-size:inherit!important;padding:0!important;border-radius:0!important}
+        .markdown-body img{border-radius:4px;box-shadow:var(--shadow-lg);max-width:100%;display:block;margin:1.2rem auto}
+        .markdown-body blockquote{margin:1.5rem 0!important;padding:.8rem 1.2rem!important;border-left:3px solid var(--accent2)!important;background:var(--card)!important;color:var(--ink2)!important;border-radius:0 4px 4px 0!important;box-shadow:var(--shadow);font-style:italic}
+        .markdown-body blockquote p{margin-bottom:.5rem!important}
+        .markdown-body blockquote p:last-child{margin-bottom:0!important}
+        .markdown-body a{color:var(--accent)!important;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .2s}
+        .markdown-body a:hover{color:#6b3410!important}
+        .markdown-body ul,.markdown-body ol{padding-left:1.8em!important;margin:1rem 0!important}
+        .markdown-body li{margin-bottom:.35rem!important}
+        .markdown-body li::marker{color:var(--accent2)}
+        .markdown-body ul ul,.markdown-body ol ol,.markdown-body ul ol,.markdown-body ol ul{margin-top:.35rem!important}
+        .markdown-body hr{border:none!important;height:0!important;margin:2.5rem 0!important;border-top:1px dashed var(--line)!important;background:transparent!important}
+        .markdown-body table{border-collapse:collapse!important;width:100%!important;margin:1.5rem 0!important;font-size:.95rem!important;display:block;overflow-x:auto}
+        .markdown-body th,.markdown-body td{border:1px solid var(--line)!important;padding:.6rem .9rem!important;text-align:left!important}
+        .markdown-body th{background:rgba(139,69,19,.06)!important;font-weight:600!important;color:var(--ink)!important}
+        .markdown-body tr:nth-child(even) td{background:rgba(249,245,236,.5)!important}
+        .markdown-body strong{color:var(--ink);font-weight:700}
+        .markdown-body input[type="checkbox"]{accent-color:var(--accent2);margin-right:.4rem}
+        .markdown-body del{color:var(--ink3)}
+        .post-nav{display:flex;justify-content:space-between;gap:2rem;margin-top:4rem;padding:1.5rem 0 0;border-top:1px dashed var(--line)}
+        .post-nav a{text-decoration:none;flex:1;padding:1rem 1.2rem;border-radius:8px;transition:all .25s cubic-bezier(.16,1,.3,1);border:1px solid transparent;min-width:0}
+        .post-nav a:hover{background:var(--card);border-color:var(--line);box-shadow:var(--shadow);transform:translateY(-2px)}
+        .post-nav-label{display:block;font-size:.8rem;color:var(--ink3);margin-bottom:.3rem;letter-spacing:.04em}
+        .post-nav-title{display:block;color:var(--ink);font-weight:500;line-height:1.4}
+        .post-nav a:hover .post-nav-title{color:var(--accent)}
+        .post-nav-next{text-align:right}
+        .post-nav-empty{flex:1}
+        @media(max-width:560px){
+            .post-nav{flex-direction:column;gap:1rem}
+            .post-nav-next{text-align:left}
+        }
+
+        .s-h{position:fixed;top:0;left:0;right:0;background:rgba(249,245,236,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transform:translateY(-100%);transition:transform .4s cubic-bezier(.16,1,.3,1);z-index:100;padding:.7rem 1.5rem}
+        .s-h.v{transform:translateY(0)}
+        .s-h-c{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto}
+        .s-h-l{font-weight:700;text-decoration:none;color:var(--ink);font-size:1.15rem;letter-spacing:.02em;position:relative}
+        .s-h-l::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--accent);transition:width .3s ease}
+        .s-h-l:hover::after{width:100%}
+        .s-h .nav-columns{margin:0;padding:0;gap:1.4rem}
+        .s-h .nav-columns::after{display:none}
+        .s-h .nav-columns a::after{display:none}
+        .s-h .nav-columns a.active::after{bottom:-.4rem}
+
+        .s-i{width:100%;padding:.75rem 1rem;border:1px solid var(--line);border-radius:4px;margin-bottom:2rem;outline:none;transition:all .25s;font-size:1rem;background:var(--card);color:var(--ink)}
+        .s-i:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(139,69,19,.08)}
+        .s-i::placeholder{color:var(--ink3)}
+
+        footer{margin-top:5rem;border-top:1px dashed var(--line);padding:2.5rem 0 1rem}
+        .lk{display:flex;flex-wrap:wrap;gap:1.8rem;align-items:center}
+        .lk a{text-decoration:none;color:var(--ink2);font-size:.92rem;transition:color .2s}
+        .lk a:hover{color:var(--accent)}
+        .ct{display:flex;flex-wrap:wrap;gap:1.2rem;color:var(--ink3);font-size:.85rem}
+        .cl{color:var(--ink3);font-weight:500}
+        footer .lk{margin-bottom:1rem}
+        @media(max-width:560px){
+            body{padding:1.5rem 1rem}
+            body.not-home{padding-top:58px}
+            .a-w{margin-bottom:1.2rem}
+            .n{font-size:1.75rem}
+            .a{width:80px;height:80px}
+            .s-h-l{font-size:1.05rem}
+            .s-h{padding:.6rem 1rem}
+            .nav-columns{gap:.8rem;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,transparent 0,#000 4px,#000 calc(100% - 20px),transparent 100%)}
+            .nav-columns::-webkit-scrollbar{display:none}
+            .i{padding:.75rem .8rem;border-radius:2px}
+            .i:hover{transform:none}
+            .markdown-body p{text-indent:1.2em}
+            .markdown-body pre{border-radius:4px!important;font-size:.8rem!important}
+            .markdown-body code[class*="language-"]{font-size:.75rem!important}
+            .post-nav a{padding:.75rem 1rem}
+            footer{margin-top:3.5rem;padding:2rem 0 .5rem}
+        }
+        @media(prefers-reduced-motion:reduce){
+            .c,.s-h,.i,.a,.s-h-l::after,.post-nav a{transition:none!important}
+            .i:hover,.post-nav a:hover{transform:none!important}
+            html{scroll-behavior:auto}
+        }
+    </style>
+</head>
+<body class="not-home">
+    <header class="s-h v" id="sh">
+        <div class="c">
+            <div class="s-h-c">
+                <a href="/" class="s-h-l">QiTry</a>
+                <nav class="nav-columns">
+                    <a href="/column/casual.html">闲言碎语</a>
+                    <a href="/column/featured.html">精品文章</a>
+                    <a href="/column/tech.html">技术随笔</a>
+                    <a href="/archive.html">搜索</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="c" id="content">
+        <div class="n">从 Shadcn-Vue 迁移到 PrimeVue 4 不完全指南</div>
+<div class="t">技术随笔 · 2026-05-26</div>
+<div class="b post-content markdown-body">
+    <p>我之前写过一篇关于 Shadcn-Vue CLI 初始化项目时 tsconfig 配置问题的文章（<a href="/posts/3d9f173.html">链接</a>），那篇文章的末尾其实埋了一条线：随着项目变复杂，Shadcn-Vue 的一些设计限制开始暴露——组件数量有限、没有内置的复杂表格、每次调样式都要去 <code>@/components/ui/</code> 里改 CVA 配置。于是我花了两周时间，把一个中等规模的后台项目从 Shadcn-Vue 完整迁到了 PrimeVue 4。这篇文章记录踩过的坑、做过的选择、以及你可能用得上的对照表。</p>
+<h2 id="为什么离开-shadcn-vue">为什么离开 Shadcn-Vue</h2>
+<p>先声明：Shadcn-Vue 是个好东西。组件源码在你手里、Tailwind 随便改、CVA 做 variants 很优雅。我之前用它搭过三个项目，体验不错。</p>
+<p>但它有几个&quot;到了一定规模才烦&quot;的问题：</p>
+<ol>
+<li><p><strong>组件太少</strong>。大约 50 个组件，没有 DataTable、Chart、Tree、FileUpload。你做后台管理系统，DataTable 这一关就过不去——你得额外引入 TanStack Table 或者自己封装，工作量大且样式难以统一。</p>
+</li>
+<li><p><strong>代码所有权是双刃剑</strong>。组件在自己仓库里改起来爽，但 Radix-Vue 升级时你改过的那部分就得手动 diff。我有一次升级 <code>reka-ui</code>，Button 组件 merge 了 30 多行冲突。</p>
+</li>
+<li><p><strong>没有设计系统内置</strong>。颜色、圆角、间距全手动。Tailwind 的 design tokens 能解决一部分，但你得自己维护 <code>--primary: #3b82f6</code> 这套体系，没有现成的 token 层级（primitive → semantic → component）。</p>
+</li>
+</ol>
+<p>PrimeVue 4 刚好在这三个点上做得不错——90+ 组件、设计 token 体系、unstyled 模式能跟 Tailwind 深度配合。而且 v4 重磅推出了 <strong>Volt</strong>，本质上就是 shadcn 模式：组件复制到你仓库里，你完全拥有源码，底层调用 unstyled PrimeVue。</p>
+<h2 id="三条迁移路径怎么选">三条迁移路径，怎么选</h2>
+<blockquote>
+<p>这一节可能是全篇最重要的内容。你选错了路径，后面全是坑。</p>
+</blockquote>
+<p>PrimeVue 4 有三种使用方式，对应三个不同的&quot;从 Shadcn-Vue 迁过去&quot;的策略：</p>
+<h3 id="路径-astyled-mode预设主题">路径 A：Styled Mode（预设主题）</h3>
+<pre><code class="language-ts">import PrimeVue from &#39;primevue/config&#39;;
+import Aura from &#39;@primeuix/themes/aura&#39;;
+app.use(PrimeVue, { theme: { preset: Aura } });
+</code></pre>
+<p>装上就是 Aura/Material/Lara/Nora 四种预设主题之一，通过 <code>definePreset()</code> 改 token 值来定制。类 MUI/Chakra 的体验。</p>
+<p><strong>适合你吗？</strong> 如果你不想管样式，只想&quot;全链路预制方案 + 改几个颜色变量&quot;，这条路最省事。但跟 Shadcn-Vue 的思路相差最远——你的 Tailwind 类和 PrimeVue 的样式系统会打架。不推荐从 Shadcn-Vue 直接切这条路。</p>
+<h3 id="路径-bunstyled-mode--pass-through">路径 B：Unstyled Mode + Pass-Through</h3>
+<pre><code class="language-ts">app.use(PrimeVue, { unstyled: true });
+</code></pre>
+<pre><code class="language-html">&lt;Button label=&quot;提交&quot; unstyled
+  pt:root=&quot;bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md&quot; /&gt;
+</code></pre>
+<p>所有 CSS 被剥离，就剩 HTML + ARIA。你用 <code>pt</code> (pass-through) 注入 Tailwind 类。大概长这样：</p>
+<p>这跟 Shadcn-Vue 的理念非常接近：你自己控制所有样式，组件只提供行为和无障碍。但有一个致命问题——<strong>pt 属性会变得极其冗长</strong>。一个 DataTable 的 pt 对象轻轻松松上百行，而且不在同一个文件里，维护体验并不好。</p>
+<h3 id="路径-cvolt最接近-shadcn-vue">路径 C：Volt（最接近 Shadcn-Vue）</h3>
+<pre><code class="language-bash">npx volt-vue@latest init
+npx volt-vue@latest add button
+</code></pre>
+<p>组件下载到 <code>@/volt/Button.vue</code>，你打开看——一个 Vue SFC 包裹 unstyled PrimeVue，Tailwind 类写死在 <code>pt</code> 对象里。效果跟 Shadcn-Vue 一模一样：<strong>组件是你的，样式在文件里直接改</strong>。</p>
+<p>这是我最推荐的路。跟 Shadcn-Vue 的迁移心智负担最小——本质上就是把 <code>components/ui/button.vue</code> 换成 <code>volt/Button.vue</code>，API 相似度大概 70%，剩余 30% 是 PrimeVue 的 props 命名差异。</p>
+<h2 id="核心组件对照表">核心组件对照表</h2>
+<p>下面这张表覆盖了 Shadcn-Vue 的常用组件在 PrimeVue 4 里的对应关系。如果你选了 Volt，它已经帮你做了这个映射——你按原来的组件名 <code>npx volt-vue@latest add</code> 就行。</p>
+<table>
+<thead>
+<tr>
+<th>Shadcn-Vue</th>
+<th>PrimeVue 4 直接使用</th>
+<th>改名/注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Accordion</td>
+<td>Accordion</td>
+<td>Volt 里叫 Accordion</td>
+</tr>
+<tr>
+<td>Alert</td>
+<td>Message</td>
+<td>severity 控制类型</td>
+</tr>
+<tr>
+<td>AlertDialog</td>
+<td>ConfirmDialog</td>
+<td>API 略有不同</td>
+</tr>
+<tr>
+<td>Avatar</td>
+<td>Avatar</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Badge</td>
+<td>Badge / OverlayBadge</td>
+<td>BadgeDirective 在 v4 已废弃</td>
+</tr>
+<tr>
+<td>Breadcrumb</td>
+<td>Breadcrumb</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Button</td>
+<td>Button</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Calendar</td>
+<td>DatePicker</td>
+<td>v4 里 Calendar 改名了</td>
+</tr>
+<tr>
+<td>Card</td>
+<td>Card</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Checkbox</td>
+<td>Checkbox</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Collapsible</td>
+<td>Accordion 单面板 或 Fieldset</td>
+<td>没有 1:1 映射</td>
+</tr>
+<tr>
+<td>Combobox</td>
+<td>AutoComplete</td>
+<td>参数略有不同</td>
+</tr>
+<tr>
+<td>Command</td>
+<td>AutoComplete</td>
+<td>Shadcn 用 cmdk，PrimeVue 没有直接等价</td>
+</tr>
+<tr>
+<td>ContextMenu</td>
+<td>ContextMenu</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>DataTable</td>
+<td>DataTable</td>
+<td>PrimeVue 的内置分页/排序/筛选远更强</td>
+</tr>
+<tr>
+<td>DatePicker</td>
+<td>DatePicker</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Dialog</td>
+<td>Dialog</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Drawer / Sheet</td>
+<td>Drawer</td>
+<td>v4 里 Sidebar 也改名 Drawer</td>
+</tr>
+<tr>
+<td>DropdownMenu</td>
+<td>Menu / TieredMenu</td>
+<td>PrimeVue 菜单类型多，按需选</td>
+</tr>
+<tr>
+<td>Form</td>
+<td><code>@primevue/forms</code></td>
+<td>也可继续用 VeeValidate</td>
+</tr>
+<tr>
+<td>HoverCard</td>
+<td>Popover + Tooltip 组合</td>
+<td>没有直接等价</td>
+</tr>
+<tr>
+<td>Input</td>
+<td>InputText</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Label</td>
+<td>FloatLabel / IftaLabel</td>
+<td>PrimeVue 的标签模式不同</td>
+</tr>
+<tr>
+<td>Menubar</td>
+<td>Menubar</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>NumberField</td>
+<td>InputNumber</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Pagination</td>
+<td>Paginator</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Popover</td>
+<td>Popover</td>
+<td>v4 里 OverlayPanel 改名 Popover</td>
+</tr>
+<tr>
+<td>Progress</td>
+<td>ProgressBar</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>RadioGroup</td>
+<td>RadioButton</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>ScrollArea</td>
+<td>ScrollPanel</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Select</td>
+<td>Select</td>
+<td>v4 里 Dropdown 改名 Select</td>
+</tr>
+<tr>
+<td>Separator</td>
+<td>Divider</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Skeleton</td>
+<td>Skeleton</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td>Slider</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Stepper</td>
+<td>Stepper</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Switch</td>
+<td>ToggleSwitch</td>
+<td>v4 里 InputSwitch 改名</td>
+</tr>
+<tr>
+<td>Table</td>
+<td>DataTable (lite)</td>
+<td>PrimeVue DataTable 可简化模拟基础表格</td>
+</tr>
+<tr>
+<td>Tabs</td>
+<td>Tabs</td>
+<td>v4 里 TabView 改名 Tabs</td>
+</tr>
+<tr>
+<td>TagsInput</td>
+<td>AutoComplete (multiple)</td>
+<td>v4 中 Chips 已废弃</td>
+</tr>
+<tr>
+<td>Textarea</td>
+<td>Textarea</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Toast</td>
+<td>Toast + useToast</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Toggle</td>
+<td>ToggleButton</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>ToggleGroup</td>
+<td>SelectButton</td>
+<td>直接对应</td>
+</tr>
+<tr>
+<td>Tooltip</td>
+<td>Tooltip</td>
+<td>直接对应</td>
+</tr>
+</tbody></table>
+<h2 id="迁移步骤实战">迁移步骤实战</h2>
+<p>假设你有一个用 Shadcn-Vue + Tailwind 的 Vite 项目，打算迁到 Volt。</p>
+<h3 id="第一步清理">第一步：清理</h3>
+<pre><code class="language-bash"># 卸载 shadcn-vue（保留 reka-ui 如果别处还在用的话）
+npm uninstall shadcn-vue
+
+# 删除拷贝进来的组件
+rm -rf src/components/ui
+rm components.json
+</code></pre>
+<blockquote>
+<p>注意：别急着删 <code>@/lib/utils.ts</code> 里的 <code>cn()</code> 函数——Volt 也需要它来做 class 合并。</p>
+</blockquote>
+<h3 id="第二步安装-primevue--volt">第二步：安装 PrimeVue + Volt</h3>
+<pre><code class="language-bash">npm install primevue @primeuix/themes @phosphor-icons/vue
+npx volt-vue@latest init
+</code></pre>
+<p>初始化会问你几个问题：组件目录（默认 <code>@/volt</code>）、CSS 变量文件名、以及要不要启用图标。建议都选默认，后续再调。</p>
+<h3 id="第三步配置入口">第三步：配置入口</h3>
+<pre><code class="language-ts">// main.ts
+import { createApp } from &#39;vue&#39;;
+import PrimeVue from &#39;primevue/config&#39;;
+import Aura from &#39;@primeuix/themes/aura&#39;;
+import App from &#39;./App.vue&#39;;
+import &#39;./assets/main.css&#39;;
+
+const app = createApp(App);
+app.use(PrimeVue, {
+    unstyled: true, // Volt 组件内部自己带样式
+    theme: { preset: Aura } // 即使 unstyled 也建议配一个预设，Volt 可能引用 token
+});
+app.mount(&#39;#app&#39;);
+</code></pre>
+<p>Tailwind 配置里记得加 <code>darkMode: [&#39;class&#39;, &#39;.dark&#39;]</code> 以匹配 PrimeVue 的暗色模式逻辑。</p>
+<h3 id="第四步逐个替换组件">第四步：逐个替换组件</h3>
+<p>别一次性全替换，一个页面一个页面来。我推荐的顺序：</p>
+<ol>
+<li><strong>基础组件</strong>（Button, Input, Badge, Avatar）——API 最接近，替换几乎没有阻力</li>
+<li><strong>布局组件</strong>（Card, Dialog, Tabs, Accordion）——props 名略有差异但逻辑一致</li>
+<li><strong>表单组件</strong>（Select, Checkbox, Radio, Switch）——这部分坑最多，见下一节</li>
+<li><strong>高级组件</strong>（DataTable, Menubar, ContextMenu）——最后迁，因为这几个在 Shadcn-Vue 里可能就没有，要重新写</li>
+</ol>
+<p>每个组件替换流程：</p>
+<pre><code class="language-bash">npx volt-vue@latest add button
+# 然后全局搜索 import { Button } from &#39;@/components/ui/button&#39;
+# 替换为 import Button from &#39;@/volt/Button.vue&#39;
+</code></pre>
+<p>大多数组件的 API 兼容，改 import 就能跑。少数需要调参数——打开 Volt 组件文件看一眼 <code>defineProps</code> 就知道了。</p>
+<h3 id="第五步样式微调">第五步：样式微调</h3>
+<p>Volt 的组件样式在各自文件里，但全局设计 token 在一个 CSS 变量文件里（初始化时生成的）。打开它，你会看到类似这样的结构：</p>
+<pre><code class="language-css">:root {
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --border: #e2e8f0;
+    --radius: 0.5rem;
+    /* ... */
+}
+</code></pre>
+<p>把你的 Tailwind 项目里的颜色、圆角变量迁到这里，全局风格就统一了。</p>
+<h2 id="几个容易踩坑的地方">几个容易踩坑的地方</h2>
+<h3 id="坑一class-属性不生效">坑一：class 属性不生效</h3>
+<p>Volt 组件内部用了 <code>tailwind-merge</code>，但如果直接在 Volt 组件上写 <code>&lt;Button class=&quot;mt-4&quot;&gt;</code>，这个 class 可能被内部 pt 的样式覆盖。<strong>你必须用 <code>pt:root:class</code>：</strong></p>
+<pre><code class="language-html">&lt;!-- 不生效 --&gt;
+&lt;Button class=&quot;mt-4&quot; /&gt;
+
+&lt;!-- 生效 --&gt;
+&lt;Button pt:root:class=&quot;mt-4&quot; /&gt;
+</code></pre>
+<p>Volt 内部已经为 <code>pt:root:class</code> 做了 <code>tailwind-merge</code> 合并，所以这样写是安全的。</p>
+<h3 id="坑二表单验证库">坑二：表单验证库</h3>
+<p>Shadcn-Vue 里大家常用 VeeValidate 或 TanStack Form。PrimeVue 有自己的 <code>@primevue/forms</code>，但你完全<strong>可以继续用 VeeValidate</strong>——只需把 <code>useField</code> 返回的 <code>value</code> / <code>errorMessage</code> 传给 PrimeVue 组件对应 props：</p>
+<pre><code class="language-html">&lt;InputText v-model=&quot;value&quot; :invalid=&quot;!!errorMessage&quot; /&gt;
+&lt;small v-if=&quot;errorMessage&quot;&gt;{{ errorMessage }}&lt;/small&gt;
+</code></pre>
+<h3 id="坑三icons-体系">坑三：Icons 体系</h3>
+<p>Shadcn-Vue 用 <code>lucide-vue-next</code>，Volt 用 <code>@phosphor-icons/vue</code>。如果你在整个项目里大量用了 Lucide 图标，迁移时可以选择：</p>
+<ol>
+<li>全局替换为 Phosphor 对应图标（量大，但风格统一）</li>
+<li>继续用 Lucide，只是 Volt 组件模板里的 <code>&lt;PhHouse&gt;</code> 等要自己改</li>
+</ol>
+<p>我的方案是保留 Lucide，因为 <code>lucide-vue-next</code> 的图标名更直观。在 Volt 组件里把 <code>&lt;PhX&gt;</code> 改成 <code>&lt;component :is=&quot;icon&quot;&gt;</code>，通过 props 传入 Lucide 图标。</p>
+<h3 id="坑四dropdown--select-的-props-变化">坑四：Dropdown → Select 的 props 变化</h3>
+<p>这是最常见的&quot;以为一样、实则不同&quot;的场景。</p>
+<p>Shadcn-Vue 的 Select：</p>
+<pre><code class="language-html">&lt;Select v-model=&quot;value&quot;&gt;
+    &lt;SelectTrigger&gt;&lt;SelectValue /&gt;&lt;/SelectTrigger&gt;
+    &lt;SelectContent&gt;
+        &lt;SelectItem value=&quot;1&quot;&gt;选项一&lt;/SelectItem&gt;
+    &lt;/SelectContent&gt;
+&lt;/Select&gt;
+</code></pre>
+<p>PrimeVue 4 的 Select：</p>
+<pre><code class="language-html">&lt;Select v-model=&quot;value&quot; :options=&quot;[
+    { label: &#39;选项一&#39;, value: &#39;1&#39; },
+    { label: &#39;选项二&#39;, value: &#39;2&#39; }
+]&quot; optionLabel=&quot;label&quot; optionValue=&quot;value&quot; /&gt;
+</code></pre>
+<p>一个是组合式写法，一个是配置式写法。Volt 保留了组合式但内部实现不一样——<code>SelectItem</code> 变成了一个带 <code>value</code> prop 的选项。看 Volt 源码比看 PrimeVue 文档更快。</p>
+<h3 id="坑五pc-前缀">坑五：pc 前缀</h3>
+<p>如果你自己写 pt 配置，可能会看到 <code>pcBadge</code> 这样的字段。它是 PrimeVue 4 的一个约定：当一个组件的 pt 区域引用另一个 PrimeVue 子组件时，前缀 <code>pc</code> 表示&quot;把属性传给这个子组件&quot;。例如 Button 里的 badge 就叫 <code>pcBadge</code>。这个 v3 没有，v4 才加。</p>
+<p>不过 Volt 已经帮你处理好了这些，<strong>基本不用关心</strong>。</p>
+<h2 id="值不值得迁">值不值得迁？</h2>
+<p>聊一个务实的问题：花一两周把 Shadcn-Vue 换成 PrimeVue 4，到底值不值？</p>
+<p>我的态度是：</p>
+<ul>
+<li>如果你的项目 <strong>30 个组件以内、不需要复杂表格、没有图表需求</strong>——Shadcn-Vue 完全够用，不值得折腾。</li>
+<li>如果你在<strong>开发后台管理系统、有 DataTable/Tree/Chart 需求</strong>——迁，而且强烈建议走 Volt 路径。DataTable 一个组件能省下你几百行 TanStack Table 的配置代码。</li>
+<li>如果你<strong>想要一个完整的设计系统但不想用 Ant Design 那种黑盒方案</strong>——PrimeVue Styled Mode + token 定制是个不错的选择。虽然它跟 Shadcn-Vue 思路不同，但 token 体系的灵活性确实比&quot;纯手工 Tailwind&quot;高出不少。</li>
+</ul>
+<p>无论哪种选择，<strong>Volt 的出现让 Shadcn-Vue → PrimeVue 的迁移不再是一个&quot;推翻重来&quot;的过程，而更像&quot;换个底层实现&quot;</strong>。组件的源码所有权保留，Tailwind 的样式控制保留，只是底层从 Reka UI 换成了 PrimeVue unstyled。这个设计让我觉得 PrimeTek 是真的理解了 Shadcn 生态为什么受欢迎。</p>
+<h2 id="参考资源">参考资源</h2>
+<ul>
+<li><a href="https://primevue.org/guides/migration/v4/">PrimeVue 4 Migration Guide</a></li>
+<li><a href="https://volt.primevue.org">Volt UI</a></li>
+<li><a href="https://primevue.org/theming/unstyled/">PrimeVue Unstyled Mode</a></li>
+<li><a href="https://primevue.org/tailwind/">PrimeVue Tailwind CSS 集成指南</a></li>
+<li><a href="https://www.npmjs.com/package/tailwindcss-primeui">tailwindcss-primeui 插件</a></li>
+</ul>
+<blockquote>
+<p>补一句：上面这些链接大概率是你们搜得到的，真正有用的其实是我上文中那张组件对照表和几个坑——那是我踩了两周坑换来的。迁移好不好做，真的就看路径选没选对。</p>
+</blockquote>
+
+</div>
+
+
+<nav class="post-nav">
+    
+    <span class="post-nav-prev post-nav-empty"></span>
+    
+    
+    <a href="/posts/10710bb.html" class="post-nav-next">
+        <span class="post-nav-label">下一篇</span>
+        <span class="post-nav-title">Redis 之父为 DeepSeek V4 Flash 造了一条&#34;专属高速公路&#34;：ds4.c 技术深扒</span>
+    </a>
+    
+</nav>
+
+
+        <footer>
+            <div class="lk">
+                <span class="cl">项目链接</span>
+                <a href="https://github.com/qitry" target="_blank">GitHub</a>
+                <a href="https://logshare.cn" target="_blank">LogShare</a>
+                <a href="https://www.zhihu.com/people/--10-83-78-93" target="_blank">知乎</a>
+            </div>
+            <div class="ct">
+                <span class="cl">联系方式</span>
+                <span>qitryt@sina.cn</span>
+                <span>&copy; 2026 QiTry</span>
+            </div>
+        </footer>
+    </div>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        (function(){
+            var sh = document.getElementById('sh');
+            var content = document.getElementById('content');
+            var navLinks = document.querySelectorAll('.nav-columns a');
+            var currentPage = window.location.pathname;
+
+            window.addEventListener('scroll', function(){
+                if (isHomeUrl(currentPage)) {
+                    sh.classList.toggle('v', window.pageYOffset > 250);
+                }
+            }, { passive: true });
+
+            function setActiveNav(href) {
+                navLinks.forEach(function(a){
+                    a.classList.toggle('active', a.getAttribute('href') === href);
+                });
+            }
+            setActiveNav(currentPage);
+
+            function isHomeUrl(url) {
+                return url === '/' || url === '/index.html';
+            }
+
+            function initSearch() {
+                var searchInput = document.getElementById('searchInput');
+                var postList = document.getElementById('postList');
+                if (!searchInput || !postList) return;
+                var postItems = postList.querySelectorAll('.i');
+                var postCount = document.getElementById('postCount');
+                searchInput.oninput = function(e) {
+                    var query = e.target.value.toLowerCase();
+                    var count = 0;
+                    postItems.forEach(function(item) {
+                        var text = item.getAttribute('data-title') || '';
+                        var match = text.indexOf(query) !== -1;
+                        item.style.display = match ? '' : 'none';
+                        if (match) count++;
+                    });
+                    if (postCount) postCount.textContent = count;
+                };
+            }
+
+            function switchPageMode(isHome) {
+                if (isHome) {
+                    document.body.classList.add('home');
+                    document.body.classList.remove('not-home');
+                    sh.classList.remove('v');
+                } else {
+                    document.body.classList.add('not-home');
+                    document.body.classList.remove('home');
+                    sh.classList.add('v');
+                }
+            }
+
+            function updatePage(url) {
+                if (url === currentPage) return;
+                currentPage = url;
+                content.classList.add('fade');
+                fetch(url)
+                    .then(function(r){ return r.text(); })
+                    .then(function(html){
+                        var tmp = document.createElement('div');
+                        tmp.innerHTML = html;
+                        var newContent = tmp.querySelector('#content');
+                        if (!newContent) { window.location.href = url; return; }
+                        var titleTag = tmp.querySelector('title');
+                        if (titleTag) document.title = titleTag.textContent;
+                        content.innerHTML = newContent.innerHTML;
+                        content.classList.remove('fade');
+                        setActiveNav(url);
+                        switchPageMode(isHomeUrl(url));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        document.querySelectorAll('.markdown-body pre code').forEach(function(el){
+                            el.parentElement.classList.add('line-numbers');
+                        });
+                        Prism.highlightAll();
+                        initSearch();
+                        window.dispatchEvent(new Event('navigate'));
+                    })
+                    .catch(function(){ window.location.href = url; });
+            }
+
+            document.addEventListener('click', function(e){
+                var a = e.target.closest('a');
+                if (!a || a.hasAttribute('target') || a.getAttribute('href').startsWith('http') || a.getAttribute('href').startsWith('#')) return;
+                var href = a.getAttribute('href');
+                if (!href.endsWith('.html') && href !== '/') return;
+                e.preventDefault();
+                history.pushState(null, '', href);
+                updatePage(href);
+            });
+
+            window.addEventListener('popstate', function(){
+                updatePage(window.location.pathname);
+            });
+
+            initSearch();
+        })();
+    </script>
+</body>
+</html>

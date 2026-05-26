@@ -1,35 +1,34 @@
-const js = require("@eslint/js");
+const js = require('@eslint/js');
+const tsParser = require('@typescript-eslint/parser');
 
 module.exports = [
-    js.configs.recommended,
     {
-        files: ["build.js"],
-        languageOptions: {
-            globals: {
-                require: "readonly",
-                module: "readonly",
-                __dirname: "readonly",
-                console: "readonly",
-                process: "readonly"
-            }
-        },
-        rules: {
-            "no-unused-vars": "warn",
-            "no-console": "off",
-            "indent": ["error", 4],
-            "quotes": ["error", "single"],
-            "semi": ["error", "always"]
-        }
+        ignores: ['dist/**', 'templates/**', 'node_modules/**', 'database.json'],
     },
     {
-        files: ["templates/*.ejs"],
-        // 针对 EJS 模板中的脚本，虽然 ESLint 默认不处理 HTML，但我们为未来可能的独立脚本做准备
+        ...js.configs.recommended,
+        files: ['**/*.ts'],
         languageOptions: {
+            parser: tsParser,
             globals: {
-                window: "readonly",
-                document: "readonly",
-                console: "readonly"
-            }
-        }
-    }
+                require: 'readonly',
+                module: 'readonly',
+                __dirname: 'readonly',
+                console: 'readonly',
+                process: 'readonly',
+                Buffer: 'readonly',
+                setTimeout: 'readonly',
+                clearTimeout: 'readonly',
+                setInterval: 'readonly',
+                clearInterval: 'readonly',
+            },
+        },
+        rules: {
+            'no-unused-vars': 'warn',
+            'no-console': 'off',
+            'indent': ['error', 4],
+            'quotes': ['error', 'single'],
+            'semi': ['error', 'always'],
+        },
+    },
 ];

@@ -45,9 +45,11 @@ class Renderer {
 
     public renderAll(allPosts: PostData[], columnsMap: Record<string, string>): void {
         // 1. 生成详情页
-        allPosts.forEach(post => {
+        allPosts.forEach((post, i) => {
             if (!this.templates.post) return;
-            const body = ejs.render(this.templates.post, { post });
+            const prev = i > 0 ? allPosts[i - 1] : null;
+            const next = i < allPosts.length - 1 ? allPosts[i + 1] : null;
+            const body = ejs.render(this.templates.post, { post, prev, next });
             this.renderPage(`posts/${post.hash}.html`, post.title, body, { currentPath: post.path });
         });
 

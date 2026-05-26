@@ -3,3 +3,24 @@
 <div class="b post-content markdown-body">
     <%- post.content %>
 </div>
+
+<% if (prev || next) { %>
+<nav class="post-nav">
+    <% if (prev) { %>
+    <a href="/posts/<%= prev.hash %>.html" class="post-nav-prev">
+        <span class="post-nav-label">上一篇</span>
+        <span class="post-nav-title"><%= prev.title %></span>
+    </a>
+    <% } else { %>
+    <span class="post-nav-prev post-nav-empty"></span>
+    <% } %>
+    <% if (next) { %>
+    <a href="/posts/<%= next.hash %>.html" class="post-nav-next">
+        <span class="post-nav-label">下一篇</span>
+        <span class="post-nav-title"><%= next.title %></span>
+    </a>
+    <% } else { %>
+    <span class="post-nav-next post-nav-empty"></span>
+    <% } %>
+</nav>
+<% } %>

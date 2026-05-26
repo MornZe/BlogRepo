@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redis 之父为 DeepSeek V4 Flash 造了一条&#34;专属高速公路&#34;：ds4.c 技术深扒 - QiTry</title>
+    <meta name="description" content="QiTry 琪初的个人博客，分享技术随笔、精品文章与生活感悟。">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.2.5/index.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        *::selection{background:rgba(139,69,19,.15);color:var(--ink)}
+        :focus-visible{outline:2px solid var(--accent2);outline-offset:2px;border-radius:2px}
+        html{--paper:#f9f5ec;--ink:#2c2416;--ink2:#6b5e4a;--ink3:#9c8b70;--accent:#8b4513;--accent2:#cd853f;--line:#e0d5c1;--card:#fefcf7;--shadow:0 1px 3px rgba(44,36,22,.06),0 2px 8px rgba(44,36,22,.04);--shadow-lg:0 2px 6px rgba(44,36,22,.08),0 6px 20px rgba(44,36,22,.06);scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+        body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC','Source Han Serif SC','Songti SC',ui-serif,Georgia,serif;line-height:1.8;padding:2.5rem 1.5rem 2rem;position:relative}
+        body::before{content:'';position:fixed;inset:0;opacity:.025;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px;z-index:0}
+        body.not-home{padding-top:72px}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+        ::-webkit-scrollbar-thumb:hover{background:var(--ink3)}
+        .c{max-width:720px;margin:0 auto;opacity:1;transition:opacity .2s ease;position:relative;z-index:1}
+        .c.fade{opacity:0}
+        .c>.n,.c>.t,.c>.l,.c>.b,.c>.nav-columns,.c>.a-w{position:relative}
+        .c>.n,.c>.t,.c>.l,.c>.b,.c>.nav-columns,.c>.a-w{z-index:1}
+
+        .a-w{position:relative;display:inline-block;margin-bottom:1.6rem}
+        .a{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--card);box-shadow:var(--shadow);transition:transform .3s ease}
+        .a:hover{transform:scale(1.04)}
+        .a-d{position:absolute;bottom:4px;right:4px;width:20px;height:20px;background:#22c55e;border-radius:50%;border:2px solid var(--paper)}
+
+        .n{font-size:2.2rem;font-weight:700;letter-spacing:.02em;margin-bottom:.4rem;line-height:1.3;color:var(--ink)}
+        .t{color:var(--ink2);margin-bottom:1.6rem;font-size:.95rem;letter-spacing:.02em}
+        .b{margin-bottom:2rem}
+        .b p{margin-bottom:.9rem;text-indent:2em}
+        .b p:first-of-type{text-indent:0}
+        .h{background:rgba(139,69,19,.1);color:var(--accent);padding:.1rem .3rem;border-radius:3px}
+
+        .l{margin:1.5rem 0}
+        .l-t{font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;letter-spacing:.04em}
+        .l-t::before{content:'◆';color:var(--accent2);font-size:.5rem}
+        .l-t::after{content:'';flex:1;height:1px;background:var(--line)}
+
+        .i{margin-bottom:.6rem;padding:1rem 1.2rem;border-radius:4px;transition:all .25s cubic-bezier(.16,1,.3,1);border-bottom:1px dashed var(--line);position:relative}
+        .i:last-of-type{border-bottom:none}
+        .i:hover{background:var(--card);box-shadow:var(--shadow);border-bottom-color:transparent;border-radius:6px;transform:translateX(6px)}
+        .i a{text-decoration:none;color:inherit;display:block}
+        .i-t{font-size:1.05rem;font-weight:500;transition:color .2s;line-height:1.45;color:var(--ink)}
+        .i a:hover .i-t{color:var(--accent)}
+        .i-m{font-size:.82rem;color:var(--ink3);margin-top:.3rem;letter-spacing:.01em}
+
+        .nav-columns{display:flex;gap:1.6rem;margin-bottom:2rem;padding-bottom:.8rem;position:relative}
+        .nav-columns::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--line)}
+        .nav-columns a{text-decoration:none;color:var(--ink3);font-size:.92rem;transition:color .2s;position:relative;letter-spacing:.02em}
+        .nav-columns a:hover{color:var(--ink)}
+        .nav-columns a.active{color:var(--ink);font-weight:600}
+        .nav-columns a.active::after{content:'';position:absolute;bottom:-.8rem;left:0;width:100%;height:2px;background:var(--accent)}
+
+        .markdown-body{background-color:transparent!important;color:inherit!important;font-size:1.05rem!important;line-height:1.85!important;font-family:inherit!important}
+        .markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4{border:none!important;color:var(--ink)!important;font-family:'Noto Serif SC',ui-serif,Georgia,serif!important;font-weight:700!important;line-height:1.3!important}
+        .markdown-body h1{font-size:1.8rem!important;margin:2.8rem 0 1rem!important;padding-bottom:.6rem;border-bottom:2px solid var(--accent2)!important;letter-spacing:.03em}
+        .markdown-body h2{font-size:1.45rem!important;margin:2.4rem 0 .8rem!important;padding-bottom:.4rem;border-bottom:1px dashed var(--line)!important;letter-spacing:.02em}
+        .markdown-body h3{font-size:1.2rem!important;margin:1.8rem 0 .6rem!important;letter-spacing:.01em}
+        .markdown-body h4{font-size:1.05rem!important;margin:1.4rem 0 .5rem!important}
+        .markdown-body h1+p,.markdown-body h2+p,.markdown-body h3+p,.markdown-body h4+p{margin-top:.4rem!important}
+        .markdown-body p{margin-bottom:1rem;text-indent:2em}
+        .markdown-body p:first-of-type,.markdown-body h1+p,.markdown-body h2+p,.markdown-body h3+p,.markdown-body h4+p,.markdown-body blockquote p,.markdown-body li>p,.markdown-body ul+p,.markdown-body ol+p,.markdown-body pre+p{text-indent:0}
+        .markdown-body pre{background:#3a3226!important;border:none!important;padding:1.2em!important;border-radius:6px!important;overflow-x:auto;margin:1.2rem 0!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.2)}
+        .markdown-body code[class*="language-"]{font-size:.85rem!important}
+        .line-numbers .line-numbers-rows{border-right:1px solid rgba(140,128,98,.15)!important}
+        .line-numbers-rows>span:before{color:#8c8062!important}
+        .markdown-body code{font-family:'Fira Code','Roboto Mono',monospace!important;background:rgba(139,69,19,.06)!important;color:var(--accent)!important;padding:.15em .4em!important;border-radius:3px!important;font-size:.9em!important}
+        .markdown-body pre code{background:transparent!important;color:#e8dcc8!important;font-size:inherit!important;padding:0!important;border-radius:0!important}
+        .markdown-body img{border-radius:4px;box-shadow:var(--shadow-lg);max-width:100%;display:block;margin:1.2rem auto}
+        .markdown-body blockquote{margin:1.5rem 0!important;padding:.8rem 1.2rem!important;border-left:3px solid var(--accent2)!important;background:var(--card)!important;color:var(--ink2)!important;border-radius:0 4px 4px 0!important;box-shadow:var(--shadow);font-style:italic}
+        .markdown-body blockquote p{margin-bottom:.5rem!important}
+        .markdown-body blockquote p:last-child{margin-bottom:0!important}
+        .markdown-body a{color:var(--accent)!important;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .2s}
+        .markdown-body a:hover{color:#6b3410!important}
+        .markdown-body ul,.markdown-body ol{padding-left:1.8em!important;margin:1rem 0!important}
+        .markdown-body li{margin-bottom:.35rem!important}
+        .markdown-body li::marker{color:var(--accent2)}
+        .markdown-body ul ul,.markdown-body ol ol,.markdown-body ul ol,.markdown-body ol ul{margin-top:.35rem!important}
+        .markdown-body hr{border:none!important;height:0!important;margin:2.5rem 0!important;border-top:1px dashed var(--line)!important;background:transparent!important}
+        .markdown-body table{border-collapse:collapse!important;width:100%!important;margin:1.5rem 0!important;font-size:.95rem!important;display:block;overflow-x:auto}
+        .markdown-body th,.markdown-body td{border:1px solid var(--line)!important;padding:.6rem .9rem!important;text-align:left!important}
+        .markdown-body th{background:rgba(139,69,19,.06)!important;font-weight:600!important;color:var(--ink)!important}
+        .markdown-body tr:nth-child(even) td{background:rgba(249,245,236,.5)!important}
+        .markdown-body strong{color:var(--ink);font-weight:700}
+        .markdown-body input[type="checkbox"]{accent-color:var(--accent2);margin-right:.4rem}
+        .markdown-body del{color:var(--ink3)}
+        .post-nav{display:flex;justify-content:space-between;gap:2rem;margin-top:4rem;padding:1.5rem 0 0;border-top:1px dashed var(--line)}
+        .post-nav a{text-decoration:none;flex:1;padding:1rem 1.2rem;border-radius:8px;transition:all .25s cubic-bezier(.16,1,.3,1);border:1px solid transparent;min-width:0}
+        .post-nav a:hover{background:var(--card);border-color:var(--line);box-shadow:var(--shadow);transform:translateY(-2px)}
+        .post-nav-label{display:block;font-size:.8rem;color:var(--ink3);margin-bottom:.3rem;letter-spacing:.04em}
+        .post-nav-title{display:block;color:var(--ink);font-weight:500;line-height:1.4}
+        .post-nav a:hover .post-nav-title{color:var(--accent)}
+        .post-nav-next{text-align:right}
+        .post-nav-empty{flex:1}
+        @media(max-width:560px){
+            .post-nav{flex-direction:column;gap:1rem}
+            .post-nav-next{text-align:left}
+        }
+
+        .s-h{position:fixed;top:0;left:0;right:0;background:rgba(249,245,236,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transform:translateY(-100%);transition:transform .4s cubic-bezier(.16,1,.3,1);z-index:100;padding:.7rem 1.5rem}
+        .s-h.v{transform:translateY(0)}
+        .s-h-c{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto}
+        .s-h-l{font-weight:700;text-decoration:none;color:var(--ink);font-size:1.15rem;letter-spacing:.02em;position:relative}
+        .s-h-l::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--accent);transition:width .3s ease}
+        .s-h-l:hover::after{width:100%}
+        .s-h .nav-columns{margin:0;padding:0;gap:1.4rem}
+        .s-h .nav-columns::after{display:none}
+        .s-h .nav-columns a::after{display:none}
+        .s-h .nav-columns a.active::after{bottom:-.4rem}
+
+        .s-i{width:100%;padding:.75rem 1rem;border:1px solid var(--line);border-radius:4px;margin-bottom:2rem;outline:none;transition:all .25s;font-size:1rem;background:var(--card);color:var(--ink)}
+        .s-i:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(139,69,19,.08)}
+        .s-i::placeholder{color:var(--ink3)}
+
+        footer{margin-top:5rem;border-top:1px dashed var(--line);padding:2.5rem 0 1rem}
+        .lk{display:flex;flex-wrap:wrap;gap:1.8rem;align-items:center}
+        .lk a{text-decoration:none;color:var(--ink2);font-size:.92rem;transition:color .2s}
+        .lk a:hover{color:var(--accent)}
+        .ct{display:flex;flex-wrap:wrap;gap:1.2rem;color:var(--ink3);font-size:.85rem}
+        .cl{color:var(--ink3);font-weight:500}
+        footer .lk{margin-bottom:1rem}
+        @media(max-width:560px){
+            body{padding:1.5rem 1rem}
+            body.not-home{padding-top:58px}
+            .a-w{margin-bottom:1.2rem}
+            .n{font-size:1.75rem}
+            .a{width:80px;height:80px}
+            .s-h-l{font-size:1.05rem}
+            .s-h{padding:.6rem 1rem}
+            .nav-columns{gap:.8rem;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,transparent 0,#000 4px,#000 calc(100% - 20px),transparent 100%)}
+            .nav-columns::-webkit-scrollbar{display:none}
+            .i{padding:.75rem .8rem;border-radius:2px}
+            .i:hover{transform:none}
+            .markdown-body p{text-indent:1.2em}
+            .markdown-body pre{border-radius:4px!important;font-size:.8rem!important}
+            .markdown-body code[class*="language-"]{font-size:.75rem!important}
+            .post-nav a{padding:.75rem 1rem}
+            footer{margin-top:3.5rem;padding:2rem 0 .5rem}
+        }
+        @media(prefers-reduced-motion:reduce){
+            .c,.s-h,.i,.a,.s-h-l::after,.post-nav a{transition:none!important}
+            .i:hover,.post-nav a:hover{transform:none!important}
+            html{scroll-behavior:auto}
+        }
+    </style>
+</head>
+<body class="not-home">
+    <header class="s-h v" id="sh">
+        <div class="c">
+            <div class="s-h-c">
+                <a href="/" class="s-h-l">QiTry</a>
+                <nav class="nav-columns">
+                    <a href="/column/casual.html">闲言碎语</a>
+                    <a href="/column/featured.html">精品文章</a>
+                    <a href="/column/tech.html">技术随笔</a>
+                    <a href="/archive.html">搜索</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="c" id="content">
+        <div class="n">Redis 之父为 DeepSeek V4 Flash 造了一条&#34;专属高速公路&#34;：ds4.c 技术深扒</div>
+<div class="t">闲言碎语 · 2026-05-11</div>
+<div class="b post-content markdown-body">
+    <p>Redis 之父 Salvatore Sanfilippo（antirez）于 2026 年 5 月 7 日在 GitHub 发布了 ds4.c——一个专为 DeepSeek V4 Flash 打造的本地推理引擎。这不是又一个 llama.cpp 的 wrapper，而是一个&quot;故意做窄&quot;的极端优化项目：只跑一个模型，只支持 Apple Silicon，只走 Metal 路径。antirez 在 README 中开宗明义：&quot;这不是通用 GGUF 加载器，不是框架，不是包装层。&quot;</p>
+<h2 id="为什么值得单独造一条高速公路">为什么值得单独造一条&quot;高速公路&quot;？</h2>
+<p>DeepSeek V4 Flash 发布于 2026 年 4 月 24 日，总参数 284B，激活参数仅 13B，上下文窗口 100 万 token。antirez 将其定位为&quot;准前沿&quot;（quasi-frontier）模型，理由很具体：</p>
+<ol>
+<li><strong>思考模式可控</strong>：在 thinking 模式下，V4 Flash 的思考链长度仅为其他模型的 1/5，且与问题复杂度成正比——这在其他模型上几乎无法实用</li>
+<li><strong>知识边界更深</strong>：284B 参数在边缘知识采样时明显优于 27B/35B 密集模型</li>
+<li><strong>多语言能力突出</strong>：英语和意大利语写作质量显著优于同档模型</li>
+<li><strong>KV Cache 压缩率极高</strong>：支持磁盘持久化，为长上下文本地推理提供了物理基础</li>
+<li><strong>QAT 训练友好</strong>：模型原生支持激进量化，2-bit 下仍能保持工具调用可靠性</li>
+</ol>
+<p>这种&quot;准前沿&quot;定位意味着它既不像 70B 密集模型那样&quot;勉强够用&quot;，也不像 405B 模型那样对硬件要求苛刻到无法本地运行。antirez 的原话是：&quot;这是第一次，我感觉自己的电脑上跑着一个前沿模型。&quot;</p>
+<h2 id="三大工程杀招">三大工程杀招</h2>
+<h3 id="1-非对称-2-bit-量化只压该压的地方">1. 非对称 2-bit 量化：只压&quot;该压&quot;的地方</h3>
+<p>业界对 2-bit 量化的普遍担忧是模型会开始幻觉、工具调用崩坏。ds4.c 的解法不是&quot;全压&quot;，而是<strong>只量化路由 MoE 专家层</strong>：</p>
+<ul>
+<li><strong>压缩区</strong>：路由专家的上/门控投影用 <code>IQ2_XXS</code>，下投影用 <code>Q2_K</code>——这些占模型权重的绝对大头</li>
+<li><strong>保真区</strong>：共享专家、投影层、路由层、嵌入层全部保持 <code>Q8</code> 精度</li>
+</ul>
+<p>效果：Q2 量化后模型约 76GB，可在 128GB 统一内存的 MacBook Pro M3 Max 上运行，且通过官方 API logits 比对验证，数值偏差在可用范围内。antirez 在 Hacker News 上解释，这很大程度上归功于 DeepSeek 的 QAT（Quantization-Aware Training）训练——量化误差被直接纳入学习过程。</p>
+<p>这种&quot;非对称&quot;策略与业界通行的&quot;全模型统一量化&quot;思路截然不同。通用框架为了兼容性，必须对所有模型一视同仁；而 ds4.c 因为只服务一个模型，可以精确知道哪些层对精度敏感、哪些层可以激进压缩。这是&quot;专属高速公路&quot;的第一个具象化体现。</p>
+<h3 id="2-kv-cache-磁盘化ssd-作为一等公民">2. KV Cache 磁盘化：SSD 作为&quot;一等公民&quot;</h3>
+<p>这是 ds4.c 最具架构野心的设计。当前 LLM Agent 客户端（如 Claude Code）基本都是无状态的：每次请求把完整对话历史重发一遍，服务端从头做 prefill。对于一个 25K token 的系统提示，本地硬件上这意味着几十秒的首次 token 延迟。</p>
+<p>ds4.c 的做法是：<strong>预填充完成后，将 KV 状态序列化到磁盘，键值为 token ID 序列的 SHA1 哈希</strong>。下次请求若前缀匹配，直接从磁盘加载 checkpoint，跳过 prefill。README 中的原话是：&quot;The KV cache is actually a first class disk citizen.&quot;</p>
+<p>这不是&quot;内存不够了换到磁盘&quot;的被动 swap，而是主动架构设计——现代 MacBook 的 SSD 速度足够快，而 DeepSeek V4 的 KV Cache 压缩率极高，加上 Agent 场景&quot;相同系统提示 + 变化尾部&quot;的访问模式，磁盘 KV 的命中率天然很高。</p>
+<p>更令人惊讶的是，这种设计在通用框架中几乎不可能实现。KV Cache 的格式、压缩率、序列化方式因模型而异，通用引擎为了兼容数百个模型，无法针对单一模型的磁盘 I/O 特性做深度优化。ds4.c 的&quot;模型锁定&quot;在这里反而成了优势。</p>
+<h3 id="3-metal-only拒绝抽象层的性能税">3. Metal-Only：拒绝抽象层的性能税</h3>
+<p>代码语言分布很有意思：59.2% C，27.6% Objective-C，12.6% Metal Shading Language。六个主文件，零外部依赖，直接调用系统工具链编译。</p>
+<ul>
+<li><code>ds4.c</code>：推理引擎核心</li>
+<li><code>ds4_metal.m</code>：GPU 加速层</li>
+<li><code>ds4_cli.c</code>：终端交互界面</li>
+<li><code>ds4_server.c</code>：HTTP 服务器（同时兼容 OpenAI <code>/v1/chat/completions</code> 和 Anthropic <code>/v1/messages</code> 协议）</li>
+<li><code>ds4_test.c</code>：logits 数值保真度测试</li>
+</ul>
+<p>CPU 路径在代码中存在，但仅用于内核正确性验证——antirez 警告，近期 macOS 版本存在虚拟内存管理 bug，大工作集下 CPU 推理会直接崩溃。所以生产路径必须是 Metal-only。</p>
+<p>这种&quot;去抽象层&quot;的思路与通用框架背道而驰。llama.cpp 为了支持 CUDA、Metal、Vulkan、CPU 等多种后端，不得不在算子层面做大量通用封装；ds4.c 则直接针对 M3 Max/Ultra 的 GPU 架构写死计算图，每个 kernel 的 tile 大小、shared memory 分配、warp 调度都是手工调参。通用框架覆盖 95% 场景，ds4.c 追求那 5% 的极致。</p>
+<h2 id="实测性能数据">实测性能数据</h2>
+<table>
+<thead>
+<tr>
+<th>硬件</th>
+<th>量化</th>
+<th>上下文</th>
+<th>预填充</th>
+<th>生成速度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MacBook Pro M3 Max (128GB)</td>
+<td>Q2</td>
+<td>短 prompt</td>
+<td>58.52 tok/s</td>
+<td><strong>26.68 tok/s</strong></td>
+</tr>
+<tr>
+<td>MacBook Pro M3 Max (128GB)</td>
+<td>Q2</td>
+<td>11,709 tokens</td>
+<td>250.11 tok/s</td>
+<td>21.47 tok/s</td>
+</tr>
+<tr>
+<td>Mac Studio M3 Ultra (512GB)</td>
+<td>Q2</td>
+<td>短 prompt</td>
+<td>84.43 tok/s</td>
+<td><strong>36.86 tok/s</strong></td>
+</tr>
+<tr>
+<td>Mac Studio M3 Ultra (512GB)</td>
+<td>Q4</td>
+<td>12,018 tokens</td>
+<td>448.82 tok/s</td>
+<td>26.62 tok/s</td>
+</tr>
+</tbody></table>
+<p>数据来源：ds4.c 官方 README 及社区实测。作为参照，一个 284B MoE 模型在笔记本上跑出 26 tok/s 的生成速度，半年前这还是数据中心 GPU 的活。</p>
+<p>功耗方面，M3 Max 峰值约 50W——与普通笔记本工作负载持平，连续 Agent 会话平均功耗约 30W，每小时电费几毛钱级别。这意味着你不仅能在本地跑前沿模型，还能在咖啡馆里用电池跑。</p>
+<h2 id="生态对接不是玩具是生产工具">生态对接：不是玩具，是生产工具</h2>
+<p>ds4.c 内置了 OpenAI 和 Anthropic 双协议兼容层，支持 tool calling。README 直接提供了三个 Agent 客户端的配置示例：</p>
+<ul>
+<li><strong>Claude Code</strong>：通过 <code>--api</code> 指向本地 ds4-server</li>
+<li><strong>opencode</strong>：开源 Agent IDE，原生支持</li>
+<li><strong>Pi</strong>：个人 AI 助手客户端</li>
+</ul>
+<p>这意味着它不是&quot;能跑起来看看&quot;的 demo，而是可以直接接入现有 Agent 工作流的推理后端。你不需要重写任何客户端代码，只需要把 API endpoint 从 <code>api.openai.com</code> 换成 <code>localhost:8080</code>。</p>
+<h2 id="争议与边界">争议与边界</h2>
+<p><strong>alpha 质量</strong>：antirez 明确标注代码和 GGUF 文件均为 alpha 状态，&quot;推理和模型服务是复杂领域，这一切只存在了几天&quot;，预计需要数月才能达到更稳定形态。</p>
+<p><strong>Metal 独占</strong>：没有 CUDA，没有 AMD，没有 CPU 回退。这是设计选择，不是技术债务。antirez 认为，一旦决定只支持一个模型，GGML 的通用调度机制就成了死重——不如写一个针对特定计算图的静态优化器。</p>
+<p><strong>模型锁定</strong>：不支持其他 GGUF 文件，tensor layout、量化混合策略、metadata、可选 MTP 状态都是硬编码的。换模型就需要换引擎。</p>
+<p>这些限制在&quot;通用框架&quot;的视角下都是缺陷，但在&quot;专属高速公路&quot;的视角下是 trade-off。antirez 的赌注是：DeepSeek V4 Flash 的独特性（极端稀疏、QAT 友好、长上下文）值得这种程度的定制化投入。</p>
+<h2 id="行业信号从通用框架到模型专属引擎">行业信号：从&quot;通用框架&quot;到&quot;模型专属引擎&quot;？</h2>
+<p>ds4.c 的出现可能标志着一个趋势拐点。过去本地推理的叙事是&quot;一个引擎跑所有模型&quot;（llama.cpp、vLLM、MLX）。但 antirez 提出了另一种哲学：<strong>通用引擎为了兼容性必须做抽象，抽象意味着妥协；而 deliberately narrow 的代码库可以把一件事做到极致</strong>。</p>
+<p>他在 X 上的致谢也很有意思——没有 llama.cpp 和 GGML 社区的工作，ds4.c 不可能存在，但 ds4.c 选择不链接 GGML，而是把其工程经验内化为一个专用 Metal 计算图。LICENSE 中保留了对 GGML 作者的署名致谢。</p>
+<p>这是否意味着未来每个&quot;特性足够独特&quot;的模型都会催生一个专属引擎？antirez 的答案是：通用项目覆盖 95% 场景，而像 V4 Flash 这样具有极端稀疏性和 QAT 友好性的模型，值得那 5% 的手工优化投入。</p>
+<p>更深层的信号在于，本地推理正在从&quot;边缘爱好者的玩具&quot;向&quot;生产力基础设施&quot;进化。当 284B 模型能在笔记本上以 26 tok/s 生成、支持 100 万 token 上下文、兼容现有 Agent 生态时，&quot;本地&quot;与&quot;云端&quot;的边界开始模糊。开发者不再需要为了&quot;能用&quot;而忍受通用框架的妥协，也不需要为了&quot;极致&quot;而雇佣专门的 CUDA 工程师——一个专注的 C 程序员加上对单一模型的深度理解，就能造出可用的生产级引擎。</p>
+<p>对于仍在评估本地推理方案的开发者来说，这次变动或许是一个警示——在评估任何推理框架时，不仅要看它支持多少模型，更要审视其优化深度是否与你的核心模型匹配。通用性是广度，专属是深度，而 ds4.c 证明，在特定场景下，深度可以碾压广度。</p>
+<hr>
+<p><strong>项目地址</strong>：<a href="https://github.com/antirez/ds4">https://github.com/antirez/ds4</a><br><strong>模型权重</strong>：<a href="https://huggingface.co/antirez/deepseek-v4-gguf">https://huggingface.co/antirez/deepseek-v4-gguf</a><br><strong>编译依赖</strong>：Xcode Command Line Tools + curl，零第三方库</p>
+<p>如果你有一台 128GB 内存的 Apple Silicon Mac，现在就可以 <code>./download_model.sh q2 &amp;&amp; make</code> 跑起来。antirez 的原话是：&quot;这是第一次，我感觉自己的电脑上跑着一个前沿模型。&quot;</p>
+
+</div>
+
+
+<nav class="post-nav">
+    
+    <a href="/posts/727e306.html" class="post-nav-prev">
+        <span class="post-nav-label">上一篇</span>
+        <span class="post-nav-title">从 Shadcn-Vue 迁移到 PrimeVue 4 不完全指南</span>
+    </a>
+    
+    
+    <a href="/posts/7e31ec7.html" class="post-nav-next">
+        <span class="post-nav-label">下一篇</span>
+        <span class="post-nav-title">关于我个人对 Spec Coding 的一些看法和理解</span>
+    </a>
+    
+</nav>
+
+
+        <footer>
+            <div class="lk">
+                <span class="cl">项目链接</span>
+                <a href="https://github.com/qitry" target="_blank">GitHub</a>
+                <a href="https://logshare.cn" target="_blank">LogShare</a>
+                <a href="https://www.zhihu.com/people/--10-83-78-93" target="_blank">知乎</a>
+            </div>
+            <div class="ct">
+                <span class="cl">联系方式</span>
+                <span>qitryt@sina.cn</span>
+                <span>&copy; 2026 QiTry</span>
+            </div>
+        </footer>
+    </div>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        (function(){
+            var sh = document.getElementById('sh');
+            var content = document.getElementById('content');
+            var navLinks = document.querySelectorAll('.nav-columns a');
+            var currentPage = window.location.pathname;
+
+            window.addEventListener('scroll', function(){
+                if (isHomeUrl(currentPage)) {
+                    sh.classList.toggle('v', window.pageYOffset > 250);
+                }
+            }, { passive: true });
+
+            function setActiveNav(href) {
+                navLinks.forEach(function(a){
+                    a.classList.toggle('active', a.getAttribute('href') === href);
+                });
+            }
+            setActiveNav(currentPage);
+
+            function isHomeUrl(url) {
+                return url === '/' || url === '/index.html';
+            }
+
+            function initSearch() {
+                var searchInput = document.getElementById('searchInput');
+                var postList = document.getElementById('postList');
+                if (!searchInput || !postList) return;
+                var postItems = postList.querySelectorAll('.i');
+                var postCount = document.getElementById('postCount');
+                searchInput.oninput = function(e) {
+                    var query = e.target.value.toLowerCase();
+                    var count = 0;
+                    postItems.forEach(function(item) {
+                        var text = item.getAttribute('data-title') || '';
+                        var match = text.indexOf(query) !== -1;
+                        item.style.display = match ? '' : 'none';
+                        if (match) count++;
+                    });
+                    if (postCount) postCount.textContent = count;
+                };
+            }
+
+            function switchPageMode(isHome) {
+                if (isHome) {
+                    document.body.classList.add('home');
+                    document.body.classList.remove('not-home');
+                    sh.classList.remove('v');
+                } else {
+                    document.body.classList.add('not-home');
+                    document.body.classList.remove('home');
+                    sh.classList.add('v');
+                }
+            }
+
+            function updatePage(url) {
+                if (url === currentPage) return;
+                currentPage = url;
+                content.classList.add('fade');
+                fetch(url)
+                    .then(function(r){ return r.text(); })
+                    .then(function(html){
+                        var tmp = document.createElement('div');
+                        tmp.innerHTML = html;
+                        var newContent = tmp.querySelector('#content');
+                        if (!newContent) { window.location.href = url; return; }
+                        var titleTag = tmp.querySelector('title');
+                        if (titleTag) document.title = titleTag.textContent;
+                        content.innerHTML = newContent.innerHTML;
+                        content.classList.remove('fade');
+                        setActiveNav(url);
+                        switchPageMode(isHomeUrl(url));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        document.querySelectorAll('.markdown-body pre code').forEach(function(el){
+                            el.parentElement.classList.add('line-numbers');
+                        });
+                        Prism.highlightAll();
+                        initSearch();
+                        window.dispatchEvent(new Event('navigate'));
+                    })
+                    .catch(function(){ window.location.href = url; });
+            }
+
+            document.addEventListener('click', function(e){
+                var a = e.target.closest('a');
+                if (!a || a.hasAttribute('target') || a.getAttribute('href').startsWith('http') || a.getAttribute('href').startsWith('#')) return;
+                var href = a.getAttribute('href');
+                if (!href.endsWith('.html') && href !== '/') return;
+                e.preventDefault();
+                history.pushState(null, '', href);
+                updatePage(href);
+            });
+
+            window.addEventListener('popstate', function(){
+                updatePage(window.location.pathname);
+            });
+
+            initSearch();
+        })();
+    </script>
+</body>
+</html>
